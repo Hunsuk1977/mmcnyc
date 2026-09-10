@@ -87,9 +87,8 @@
     }
   } catch (e) {}
 
-// 날짜 문자열 함수
-
-  function getTodayString() {
+// 오늘 날짜 가져오기
+function getTodayString() {
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -97,7 +96,7 @@
   return `${year}-${month}-${day}`;
 }
 
-async function fetchRobustPrayer() {
+async function fetchBulletproofPrayer() {
   const todayStr = getTodayString(); 
   
   const dateEl = document.getElementById('prayer-date');
@@ -108,84 +107,56 @@ async function fetchRobustPrayer() {
   const koEl = document.getElementById('prayer-text-ko');
   const enEl = document.getElementById('prayer-text-en');
 
+  // [중요] 이전 CSS에서 display: none 등으로 숨겨진 경우를 대비해 강제 노출
+  if (koEl) koEl.style.display = 'block';
+  if (enEl) enEl.style.display = 'block';
+
   try {
     const response = await fetch(rawUrl);
+    
+    // 파일이 없으면 에러 메시지
     if (!response.ok) {
-      if (koEl) koEl.innerText = "오늘 날짜의 묵상 파일이 존재하지 않습니다.";
+      if (koEl) koEl.innerText = "오늘 날짜의 묵상 파일을 찾을 수 없습니다.";
       if (enEl) enEl.innerText = "Today's devotion file was not found.";
       return;
     }
 
     const markdownText = await response.text();
-    const { prayerKo, prayerEn } = extractPrayerSmart(markdownText);
+    
+    // 1. 엔터 두 번(빈 줄)을 기준으로 텍스트를 '문단(Paragraph)' 단위로 쪼갭니다.
+    const paragraphs = markdownText.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
+    
+    let prayerKo = "";
+    let prayerEn = "";
 
-    if (koEl) koEl.innerText = prayerKo;
-    if (enEl) enEl.innerText = prayerEn;
+    // 2. 파일의 맨 뒤에서부터 역순으로 4개의 문단을 검사합니다. (기도는 항상 마지막에 있으므로)
+    const tailParagraphs = paragraphs.slice(-4).reverse();
+
+    for (let p of tailParagraphs) {
+      // 마크다운 기호(>, #) 및 불필요한 따옴표 깔끔하게 제거
+      const cleanP = p.replace(/^[>#]+\s*/gm, '').replace(/["“”,]/g, '').trim();
+      
+      // 한국어가 포함된 문단을 찾으면 (아직 안 찾았을 때만)
+      if (/[가-힣]/.test(cleanP) && !prayerKo) {
+        prayerKo = cleanP;
+      }
+      // 한국어는 없고 알파벳만 포함된 문단을 찾으면
+      else if (/[a-zA-Z]/.test(cleanP) && !/[가-힣]/.test(cleanP) && !prayerEn) {
+        prayerEn = cleanP;
+      }
+    }
+
+    // 3. 화면에 출력
+    if (koEl) koEl.innerText = prayerKo || "마크다운에서 한국어 기도문을 찾지 못했습니다.";
+    if (enEl) enEl.innerText = prayerEn || "Could not find English prayer in markdown.";
 
   } catch (error) {
     console.error('Fetch error:', error);
-    if (koEl) koEl.innerText = "기도문을 불러오는 중 오류가 발생했습니다.";
+    if (koEl) koEl.innerText = "통신 중 오류가 발생했습니다.";
   }
 }
 
-// 📌 [핵심] 가장 강력한 기도문 추출 로직
-function extractPrayerSmart(text) {
-  // 빈 줄 제거 및 배열화
-  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-  let prayerLines = [];
-
-  // 1단계: '기도' 또는 'Prayer' 라는 글자가 포함된 헤더(##)를 뒤에서부터 탐색
-  let headerIndex = -1;
-  for (let i = lines.length - 1; i >= 0; i--) {
-    if (lines[i].match(/^#+\s*.*(기도|prayer)/i)) {
-      headerIndex = i;
-      break;
-    }
-  }
-
-  // 2단계: 문장 수집
-  if (headerIndex !== -1) {
-    // 헤더가 발견되면 그 아래에 있는 문장을 다음 헤더 전까지 긁어옴
-    for (let i = headerIndex + 1; i < lines.length; i++) {
-      if (lines[i].startsWith('#')) break; 
-      prayerLines.push(cleanString(lines[i]));
-    }
-  } else {
-    // 헤더가 없으면 맨 아래 4줄 중 헤더가 아닌 문장만 긁어옴
-    for (let i = lines.length - 1; i >= 0; i--) {
-      if (lines[i].startsWith('#')) break;
-      prayerLines.unshift(cleanString(lines[i])); // 밑에서부터 찾았으니 unshift로 순서 맞춤
-      if (prayerLines.length >= 4) break; 
-    }
-  }
-
-  // 3단계: 한글과 영어 완벽 분리
-  let prayerKo = "";
-  let prayerEn = "";
-
-  prayerLines.forEach(line => {
-    // 한글이 하나라도 포함되어 있으면 한국어 기도로 분류
-    if (/[가-힣]/.test(line)) {
-      prayerKo += (prayerKo ? "\n" : "") + line;
-    } 
-    // 한글은 없고 알파벳이 포함되어 있으면 영어 기도로 분류
-    else if (/[a-zA-Z]/.test(line)) {
-      prayerEn += (prayerEn ? "\n" : "") + line;
-    }
-  });
-
-  return {
-    prayerKo: prayerKo || "한국어 기도문을 찾을 수 없습니다.",
-    prayerEn: prayerEn || "English prayer could not be found."
-  };
-}
-
-// 마크다운 인용구 기호 및 따옴표 제거 유틸 함수
-function cleanString(str) {
-  return str.replace(/^>\s*/, '').replace(/^["“]|["”]$/g, '').trim();
-}
-
-document.addEventListener('DOMContentLoaded', fetchRobustPrayer);
+document.addEventListener('DOMContentLoaded', fetchBulletproofPrayer);
   
   // Contact form -> opens the visitor's mail app with the message prefilled.
   // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
