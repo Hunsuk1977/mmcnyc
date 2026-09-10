@@ -98,60 +98,46 @@ function getTodayString() {
 
 async function fetchDailyPrayer() {
   const todayStr = getTodayString();
-  document.getElementById('prayer-date').textContent = todayStr;
+  
+  // 날짜 표시 업데이트
+  const dateEl = document.getElementById('prayer-date');
+  if (dateEl) dateEl.textContent = todayStr;
+
+  // CORS 우회를 위한 Proxy URL
+  const targetKoUrl = encodeURIComponent(`https://devotion-gamma.vercel.app/ko/${todayStr}`);
+  const targetEnUrl = encodeURIComponent(`https://devotion-gamma.vercel.app/en/${todayStr}`);
 
   try {
-    // 1. 한국어 데이터 가져오기
-    const resKo = await fetch(`https://devotion-gamma.vercel.app/ko/${todayStr}`);
-    const htmlKo = await resKo.text();
+    // 1. 한국어 데이터 요청 (CORS Proxy 경유)
+    const resKo = await fetch(`https://api.allorigins.win/get?url=${targetKoUrl}`);
+    const dataKo = await resKo.json();
     
-    // 2. 영어 데이터 가져오기 (주소 구조에 따라 /en/ 적용)
-    const resEn = await fetch(`https://devotion-gamma.vercel.app/en/${todayStr}`);
-    const htmlEn = await resEn.text();
+    // 2. 영어 데이터 요청 (CORS Proxy 경유)
+    const resEn = await fetch(`https://api.allorigins.win/get?url=${targetEnUrl}`);
+    const dataEn = await resEn.json();
 
-    // DOMParser로 HTML 내의 기도(Prayer) 파트 추출
+    // DOMParser를 통해 HTML 해석
     const parser = new DOMParser();
-    const docKo = parser.parseFromString(htmlKo, 'text/html');
-    const docEn = parser.parseFromString(htmlEn, 'text/html');
+    const docKo = parser.parseFromString(dataKo.contents, 'text/html');
+    const docEn = parser.parseFromString(dataEn.contents, 'text/html');
 
-    // 기도 섹션 요소 찾기 (페이지의 태그 구조/클래스명에 맞춰 선택자 지정)
-    const prayerKoText = docKo.querySelector('.prayer-section, #prayer, [data-prayer]')?.textContent 
-                          || "오늘의 기도를 불러올 수 없습니다.";
-    const prayerEnText = docEn.querySelector('.prayer-section, #prayer, [data-prayer]')?.textContent 
-                          || "Today's prayer is unavailable.";
+    // devotion-gamma 페이지 본문 내용 또는 특정 기도 태그 파싱
+    // (페이지 내 기도 텍스트가 들어있는 p 태그나 특정 클래스를 추출)
+    const prayerKoText = docKo.querySelector('main, article, p')?.textContent || "오늘의 기도문을 찾을 수 없습니다.";
+    const prayerEnText = docEn.querySelector('main, article, p')?.textContent || "Prayer text not found.";
 
-    document.getElementById('prayer-text-ko').innerText = prayerKoText.trim();
-    document.getElementById('prayer-text-en').innerText = prayerEnText.trim();
+    const koEl = document.getElementById('prayer-text-ko');
+    const enEl = document.getElementById('prayer-text-en');
+
+    if (koEl) koEl.innerText = prayerKoText.trim();
+    if (enEl) enEl.innerText = prayerEnText.trim();
 
   } catch (error) {
-    console.error('Prayer loading error:', error);
-    document.getElementById('prayer-text-ko').innerText = "기도문을 불러오는 중 오류가 발생했습니다.";
-    document.getElementById('prayer-text-en').innerText = "Failed to load prayer text.";
+    console.error('Prayer fetch error:', error);
+    const koEl = document.getElementById('prayer-text-ko');
+    if (koEl) koEl.innerText = "기도문을 불러오는 중 오류가 발생했습니다. (CORS 또는 네트워크 오류)";
   }
 }
-
-// 언어 전환 기능
-function switchPrayerLang(lang) {
-  const koText = document.getElementById('prayer-text-ko');
-  const enText = document.getElementById('prayer-text-en');
-  const btnKo = document.getElementById('btn-ko');
-  const btnEn = document.getElementById('btn-en');
-
-  if (lang === 'ko') {
-    koText.classList.add('active');
-    enText.classList.remove('active');
-    btnKo.classList.add('active');
-    btnEn.classList.remove('active');
-  } else {
-    enText.classList.add('active');
-    koText.classList.remove('active');
-    btnEn.classList.add('active');
-    btnKo.classList.remove('active');
-  }
-}
-
-// 페이지 로드시 실행
-document.addEventListener('DOMContentLoaded', fetchDailyPrayer);
 
   
   // Contact form -> opens the visitor's mail app with the message prefilled.
