@@ -88,6 +88,7 @@
   } catch (e) {}
 
 // 오늘 날짜 가져오기
+
 function getTodayString() {
   const today = new Date();
   const year = today.getFullYear();
@@ -96,69 +97,72 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-async function fetchBulletproofPrayer() {
-  const todayStr = getTodayString(); 
+async function fetchBilingualPrayerSeparateFiles() {
+  const todayStr = getTodayString(); // 예: '2026-09-10'
   
   const dateEl = document.getElementById('prayer-date');
   if (dateEl) dateEl.textContent = todayStr;
 
-  const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
-  const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.en.md`;
-
-  
   const koEl = document.getElementById('prayer-text-ko');
   const enEl = document.getElementById('prayer-text-en');
 
-  // [중요] 이전 CSS에서 display: none 등으로 숨겨진 경우를 대비해 강제 노출
+  // 강제 노출 설정
   if (koEl) koEl.style.display = 'block';
   if (enEl) enEl.style.display = 'block';
 
+  // 1. 한국어 파일: YYYY-MM-DD.md
+  const koUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
+  
+  // 2. 영어 파일: YYYY-MM-DD.en.md
+  const enUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.en.md`;
+
+  // ----------------------------------------------------
+  // 한국어 기도문 로드
+  // ----------------------------------------------------
   try {
-    const response = await fetch(rawUrl);
-    
-    // 파일이 없으면 에러 메시지
-    if (!response.ok) {
-      if (koEl) koEl.innerText = "오늘 날짜의 묵상 파일을 찾을 수 없습니다.";
-      if (enEl) enEl.innerText = "Today's devotion file was not found.";
-      return;
+    const resKo = await fetch(koUrl);
+    if (resKo.ok) {
+      const textKo = await resKo.text();
+      if (koEl) koEl.innerText = extractPrayerText(textKo);
+    } else {
+      if (koEl) koEl.innerText = "오늘 날짜의 한국어 기도문 파일이 존재하지 않습니다.";
     }
+  } catch (err) {
+    console.error('KO Prayer fetch error:', err);
+    if (koEl) koEl.innerText = "한국어 기도문을 불러오는 중 오류가 발생했습니다.";
+  }
 
-    const markdownText = await response.text();
-    
-    // 1. 엔터 두 번(빈 줄)을 기준으로 텍스트를 '문단(Paragraph)' 단위로 쪼갭니다.
-    const paragraphs = markdownText.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
-    
-    let prayerKo = "";
-    let prayerEn = "";
-
-    // 2. 파일의 맨 뒤에서부터 역순으로 4개의 문단을 검사합니다. (기도는 항상 마지막에 있으므로)
-    const tailParagraphs = paragraphs.slice(-4).reverse();
-
-    for (let p of tailParagraphs) {
-      // 마크다운 기호(>, #) 및 불필요한 따옴표 깔끔하게 제거
-      const cleanP = p.replace(/^[>#]+\s*/gm, '').replace(/["“”,]/g, '').trim();
-      
-      // 한국어가 포함된 문단을 찾으면 (아직 안 찾았을 때만)
-      if (/[가-힣]/.test(cleanP) && !prayerKo) {
-        prayerKo = cleanP;
-      }
-      // 한국어는 없고 알파벳만 포함된 문단을 찾으면
-      else if (/[a-zA-Z]/.test(cleanP) && !/[가-힣]/.test(cleanP) && !prayerEn) {
-        prayerEn = cleanP;
-      }
+  // ----------------------------------------------------
+  // 영어 기도문 로드 (YYYY-MM-DD.en.md)
+  // ----------------------------------------------------
+  try {
+    const resEn = await fetch(enUrl);
+    if (resEn.ok) {
+      const textEn = await resEn.text();
+      if (enEl) enEl.innerText = extractPrayerText(textEn);
+    } else {
+      if (enEl) enEl.innerText = "Today's English prayer file (YYYY-MM-DD.en.md) was not found.";
     }
-
-    // 3. 화면에 출력
-    if (koEl) koEl.innerText = prayerKo || "마크다운에서 한국어 기도문을 찾지 못했습니다.";
-    if (enEl) enEl.innerText = prayerEn || "Could not find English prayer in markdown.";
-
-  } catch (error) {
-    console.error('Fetch error:', error);
-    if (koEl) koEl.innerText = "통신 중 오류가 발생했습니다.";
+  } catch (err) {
+    console.error('EN Prayer fetch error:', err);
+    if (enEl) enEl.innerText = "Failed to load English prayer.";
   }
 }
 
-document.addEventListener('DOMContentLoaded', fetchBulletproofPrayer);
+// 각 마크다운 파일에서 기도문 추출하는 함수
+function extractPrayerText(markdownText) {
+  const paragraphs = markdownText.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
+  
+  // 맨 하단 문단들 중 최하단 문단을 가져오고 불필요한 마크다운 기호 제거
+  if (paragraphs.length > 0) {
+    const lastParagraph = paragraphs[paragraphs.length - 1];
+    return lastParagraph.replace(/^[>#]+\s*/gm, '').replace(/^["“]|["”]$/g, '').trim();
+  }
+  
+  return markdownText.trim();
+}
+
+document.addEventListener('DOMContentLoaded', fetchBilingualPrayerSeparateFiles);
   
   // Contact form -> opens the visitor's mail app with the message prefilled.
   // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
