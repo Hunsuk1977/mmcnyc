@@ -88,7 +88,8 @@
   } catch (e) {}
 
 // 날짜 문자열 함수
-function getTodayString() {
+
+  function getTodayString() {
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -96,87 +97,95 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-async function fetchAIOPrayerCard() {
-  const todayStr = getTodayString(); // '2026-09-10'
+async function fetchRobustPrayer() {
+  const todayStr = getTodayString(); 
   
-  // 날짜 표시 업데이트
   const dateEl = document.getElementById('prayer-date');
   if (dateEl) dateEl.textContent = todayStr;
 
+  const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
+  
   const koEl = document.getElementById('prayer-text-ko');
   const enEl = document.getElementById('prayer-text-en');
-
-  // 메인 마크다운 파일 경로 (Hunsuk1977/devotion/meditations/)
-  const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
 
   try {
     const response = await fetch(rawUrl);
     if (!response.ok) {
-      if (koEl) koEl.innerText = "오늘 날짜의 기도문 파일이 존재하지 않습니다.";
-      if (enEl) enEl.innerText = "Today's prayer file was not found.";
+      if (koEl) koEl.innerText = "오늘 날짜의 묵상 파일이 존재하지 않습니다.";
+      if (enEl) enEl.innerText = "Today's devotion file was not found.";
       return;
     }
 
     const markdownText = await response.text();
+    const { prayerKo, prayerEn } = extractPrayerSmart(markdownText);
 
-    // 단일 마크다운 파일 내용에서 한국어/영어 기도문 파싱 및 분류
-    const { prayerKo, prayerEn } = parseBilingualFromSingleMarkdown(markdownText);
-
-    // 큰 글씨 디자인과 한글 우선 출력
     if (koEl) koEl.innerText = prayerKo;
     if (enEl) enEl.innerText = prayerEn;
 
   } catch (error) {
-    console.error('Prayer fetch error:', error);
+    console.error('Fetch error:', error);
     if (koEl) koEl.innerText = "기도문을 불러오는 중 오류가 발생했습니다.";
-    if (enEl) enEl.innerText = "Failed to load prayer content.";
   }
 }
 
-// 하나의 마크다운 텍스트에서 한글 기도와 영문 기도를 추출 및 분류하는 함수
-function parseBilingualFromSingleMarkdown(text) {
-  const lines = text.split('\n');
-  const quoteLines = [];
+// 📌 [핵심] 가장 강력한 기도문 추출 로직
+function extractPrayerSmart(text) {
+  // 빈 줄 제거 및 배열화
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  let prayerLines = [];
 
-  // 인용구 기호(>)로 시작하는 모든 줄 수집
-  for (let line of lines) {
-    const trimmed = line.trim();
-    if (trimmed.startsWith('>')) {
-      const cleanLine = trimmed.replace(/^>\s*/, '').replace(/^["“]|["”]$/g, '').trim();
-      if (cleanLine.length > 0) {
-        quoteLines.push(cleanLine);
-      }
+  // 1단계: '기도' 또는 'Prayer' 라는 글자가 포함된 헤더(##)를 뒤에서부터 탐색
+  let headerIndex = -1;
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (lines[i].match(/^#+\s*.*(기도|prayer)/i)) {
+      headerIndex = i;
+      break;
     }
   }
 
+  // 2단계: 문장 수집
+  if (headerIndex !== -1) {
+    // 헤더가 발견되면 그 아래에 있는 문장을 다음 헤더 전까지 긁어옴
+    for (let i = headerIndex + 1; i < lines.length; i++) {
+      if (lines[i].startsWith('#')) break; 
+      prayerLines.push(cleanString(lines[i]));
+    }
+  } else {
+    // 헤더가 없으면 맨 아래 4줄 중 헤더가 아닌 문장만 긁어옴
+    for (let i = lines.length - 1; i >= 0; i--) {
+      if (lines[i].startsWith('#')) break;
+      prayerLines.unshift(cleanString(lines[i])); // 밑에서부터 찾았으니 unshift로 순서 맞춤
+      if (prayerLines.length >= 4) break; 
+    }
+  }
+
+  // 3단계: 한글과 영어 완벽 분리
   let prayerKo = "";
   let prayerEn = "";
 
-  // 추출된 인용구 줄 중 영문(알파벳)과 한글을 분류
-  quoteLines.forEach(line => {
-    // 알파벳 비중이 높은 경우 영문 기도문으로 판단 (간단하게 'Lord' 포함 여부로 체크 가능)
-    if (/[a-zA-Z]/.test(line) && !prayerEn) {
-      prayerEn = line;
-    } else if (/[가-힣]/.test(line) && !prayerKo) {
-      prayerKo = line;
+  prayerLines.forEach(line => {
+    // 한글이 하나라도 포함되어 있으면 한국어 기도로 분류
+    if (/[가-힣]/.test(line)) {
+      prayerKo += (prayerKo ? "\n" : "") + line;
+    } 
+    // 한글은 없고 알파벳이 포함되어 있으면 영어 기도로 분류
+    else if (/[a-zA-Z]/.test(line)) {
+      prayerEn += (prayerEn ? "\n" : "") + line;
     }
   });
 
-  // 파싱 실패 시 예외 처리 및 기본값
-  if (!prayerKo && quoteLines.length > 0) {
-    prayerKo = quoteLines[0]; // 맨 앞 인용구를 한글로 가정
-  }
-  if (!prayerEn && quoteLines.length > 0) {
-    prayerEn = quoteLines.find(l => /[a-zA-Z]/.test(l)) || quoteLines[0]; // 알파벳 포함 줄을 영어로 가져오거나 맨 앞 줄
-  }
-
-  return { 
-    prayerKo: prayerKo || "오늘의 기도문을 불러올 수 없습니다.", 
-    prayerEn: prayerEn || "English prayer is unavailable in this file." 
+  return {
+    prayerKo: prayerKo || "한국어 기도문을 찾을 수 없습니다.",
+    prayerEn: prayerEn || "English prayer could not be found."
   };
 }
 
-document.addEventListener('DOMContentLoaded', fetchAIOPrayerCard);
+// 마크다운 인용구 기호 및 따옴표 제거 유틸 함수
+function cleanString(str) {
+  return str.replace(/^>\s*/, '').replace(/^["“]|["”]$/g, '').trim();
+}
+
+document.addEventListener('DOMContentLoaded', fetchRobustPrayer);
   
   // Contact form -> opens the visitor's mail app with the message prefilled.
   // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
