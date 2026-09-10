@@ -87,7 +87,7 @@
     }
   } catch (e) {}
 
-// 접속한 날짜 구하기 (YYYY-MM-DD)
+// 날짜 문자열 함수
 function getTodayString() {
   const today = new Date();
   const year = today.getFullYear();
@@ -96,16 +96,17 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-async function fetchBilingualPrayer() {
+async function fetchAIOPrayerCard() {
   const todayStr = getTodayString(); // '2026-09-10'
   
+  // 날짜 표시 업데이트
   const dateEl = document.getElementById('prayer-date');
   if (dateEl) dateEl.textContent = todayStr;
 
   const koEl = document.getElementById('prayer-text-ko');
   const enEl = document.getElementById('prayer-text-en');
 
-  // 메인 마크다운 파일 경로
+  // 메인 마크다운 파일 경로 (Hunsuk1977/devotion/meditations/)
   const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
 
   try {
@@ -118,20 +119,22 @@ async function fetchBilingualPrayer() {
 
     const markdownText = await response.text();
 
-    // 마크다운 파일 내용에서 한국어/영어 기도문 파싱
-    const { prayerKo, prayerEn } = parseBilingualPrayers(markdownText);
+    // 단일 마크다운 파일 내용에서 한국어/영어 기도문 파싱 및 분류
+    const { prayerKo, prayerEn } = parseBilingualFromSingleMarkdown(markdownText);
 
+    // 큰 글씨 디자인과 한글 우선 출력
     if (koEl) koEl.innerText = prayerKo;
     if (enEl) enEl.innerText = prayerEn;
 
   } catch (error) {
     console.error('Prayer fetch error:', error);
     if (koEl) koEl.innerText = "기도문을 불러오는 중 오류가 발생했습니다.";
+    if (enEl) enEl.innerText = "Failed to load prayer content.";
   }
 }
 
-// 하나의 마크다운 텍스트에서 한글 기도와 영문 기도를 추출하는 함수
-function parseBilingualPrayers(text) {
+// 하나의 마크다운 텍스트에서 한글 기도와 영문 기도를 추출 및 분류하는 함수
+function parseBilingualFromSingleMarkdown(text) {
   const lines = text.split('\n');
   const quoteLines = [];
 
@@ -151,7 +154,7 @@ function parseBilingualPrayers(text) {
 
   // 추출된 인용구 줄 중 영문(알파벳)과 한글을 분류
   quoteLines.forEach(line => {
-    // 알파벳 비중이 높은 경우 영문 기도문으로 판단
+    // 알파벳 비중이 높은 경우 영문 기도문으로 판단 (간단하게 'Lord' 포함 여부로 체크 가능)
     if (/[a-zA-Z]/.test(line) && !prayerEn) {
       prayerEn = line;
     } else if (/[가-힣]/.test(line) && !prayerKo) {
@@ -159,18 +162,21 @@ function parseBilingualPrayers(text) {
     }
   });
 
-  // 파싱 실패 시 예외 처리
-  if (!prayerKo) {
-    prayerKo = quoteLines[0] || "오늘의 기도문을 불러올 수 없습니다.";
+  // 파싱 실패 시 예외 처리 및 기본값
+  if (!prayerKo && quoteLines.length > 0) {
+    prayerKo = quoteLines[0]; // 맨 앞 인용구를 한글로 가정
   }
-  if (!prayerEn) {
-    prayerEn = quoteLines.find(l => /[a-zA-Z]/.test(l)) || "English prayer is unavailable in this file.";
+  if (!prayerEn && quoteLines.length > 0) {
+    prayerEn = quoteLines.find(l => /[a-zA-Z]/.test(l)) || quoteLines[0]; // 알파벳 포함 줄을 영어로 가져오거나 맨 앞 줄
   }
 
-  return { prayerKo, prayerEn };
+  return { 
+    prayerKo: prayerKo || "오늘의 기도문을 불러올 수 없습니다.", 
+    prayerEn: prayerEn || "English prayer is unavailable in this file." 
+  };
 }
 
-document.addEventListener('DOMContentLoaded', fetchBilingualPrayer);
+document.addEventListener('DOMContentLoaded', fetchAIOPrayerCard);
   
   // Contact form -> opens the visitor's mail app with the message prefilled.
   // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
