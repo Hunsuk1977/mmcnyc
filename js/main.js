@@ -87,6 +87,73 @@
     }
   } catch (e) {}
 
+// 현재 접속 날짜 (YYYY-MM-DD)
+function getTodayString() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+async function fetchDailyPrayer() {
+  const todayStr = getTodayString();
+  document.getElementById('prayer-date').textContent = todayStr;
+
+  try {
+    // 1. 한국어 데이터 가져오기
+    const resKo = await fetch(`https://devotion-gamma.vercel.app/ko/${todayStr}`);
+    const htmlKo = await resKo.text();
+    
+    // 2. 영어 데이터 가져오기 (주소 구조에 따라 /en/ 적용)
+    const resEn = await fetch(`https://devotion-gamma.vercel.app/en/${todayStr}`);
+    const htmlEn = await resEn.text();
+
+    // DOMParser로 HTML 내의 기도(Prayer) 파트 추출
+    const parser = new DOMParser();
+    const docKo = parser.parseFromString(htmlKo, 'text/html');
+    const docEn = parser.parseFromString(htmlEn, 'text/html');
+
+    // 기도 섹션 요소 찾기 (페이지의 태그 구조/클래스명에 맞춰 선택자 지정)
+    const prayerKoText = docKo.querySelector('.prayer-section, #prayer, [data-prayer]')?.textContent 
+                          || "오늘의 기도를 불러올 수 없습니다.";
+    const prayerEnText = docEn.querySelector('.prayer-section, #prayer, [data-prayer]')?.textContent 
+                          || "Today's prayer is unavailable.";
+
+    document.getElementById('prayer-text-ko').innerText = prayerKoText.trim();
+    document.getElementById('prayer-text-en').innerText = prayerEnText.trim();
+
+  } catch (error) {
+    console.error('Prayer loading error:', error);
+    document.getElementById('prayer-text-ko').innerText = "기도문을 불러오는 중 오류가 발생했습니다.";
+    document.getElementById('prayer-text-en').innerText = "Failed to load prayer text.";
+  }
+}
+
+// 언어 전환 기능
+function switchPrayerLang(lang) {
+  const koText = document.getElementById('prayer-text-ko');
+  const enText = document.getElementById('prayer-text-en');
+  const btnKo = document.getElementById('btn-ko');
+  const btnEn = document.getElementById('btn-en');
+
+  if (lang === 'ko') {
+    koText.classList.add('active');
+    enText.classList.remove('active');
+    btnKo.classList.add('active');
+    btnEn.classList.remove('active');
+  } else {
+    enText.classList.add('active');
+    koText.classList.remove('active');
+    btnEn.classList.add('active');
+    btnKo.classList.remove('active');
+  }
+}
+
+// 페이지 로드시 실행
+document.addEventListener('DOMContentLoaded', fetchDailyPrayer);
+
+  
   // Contact form -> opens the visitor's mail app with the message prefilled.
   // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
   // To switch to Netlify Forms instead, see README.md.
