@@ -97,12 +97,12 @@ function getTodayString() {
 }
 
 async function fetchBilingualPrayer() {
-  const todayStr = getTodayString(); // '2026-09-10'
+  const todayStr = getTodayString(); // 예: '2026-09-10'
   
   const dateEl = document.getElementById('prayer-date');
   if (dateEl) dateEl.textContent = todayStr;
 
-  // GitHub Raw Markdown 경로
+  // GitHub Raw 파일 경로
   const rawKoUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
   const rawEnUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}_en.md`;
 
@@ -110,7 +110,7 @@ async function fetchBilingualPrayer() {
   const enEl = document.getElementById('prayer-text-en');
 
   try {
-    // 1. 한국어 기도문 로드 및 추출
+    // 1. 한국어 파일 가져오기
     const resKo = await fetch(rawKoUrl);
     if (resKo.ok) {
       const textKo = await resKo.text();
@@ -119,37 +119,57 @@ async function fetchBilingualPrayer() {
       if (koEl) koEl.innerText = "오늘 날짜의 한국어 기도문이 없습니다.";
     }
 
-    // 2. 영어 기도문 로드 및 추출
+    // 2. 영어 파일 가져오기
     const resEn = await fetch(rawEnUrl);
     if (resEn.ok) {
       const textEn = await resEn.text();
       if (enEl) enEl.innerText = extractPrayerQuote(textEn);
     } else {
-      // 영어 전용 파일이 없을 경우 한국어 파일 내의 영어 텍스트를 파싱하거나 기본 처리
-      if (enEl) enEl.innerText = "English prayer version is currently unavailable.";
+      // 영어 파일이 없는 경우: 한국어 마크다운 파일 안에서 영문 기도문 탐색
+      const resKoAgain = await fetch(rawKoUrl);
+      if (resKoAgain.ok) {
+        const textKo = await resKoAgain.text();
+        const fallbackEn = extractEnglishPrayerFallback(textKo);
+        if (enEl) enEl.innerText = fallbackEn;
+      } else {
+        if (enEl) enEl.innerText = "Prayer content unavailable.";
+      }
     }
 
   } catch (error) {
-    console.error('Prayer Fetch Error:', error);
+    console.error('Prayer fetch error:', error);
     if (koEl) koEl.innerText = "기도문을 불러오는 중 오류가 발생했습니다.";
   }
 }
 
-// 마크다운에서 맨 마지막 기도문(인용구 `> "..."`)만 추출하는 함수
+// 마크다운에서 맨 마지막 기도문(인용구 `> "..."`)만 추출하는 핵심 함수
 function extractPrayerQuote(markdownText) {
   const lines = markdownText.split('\n');
   
-  // 파일 맨 밑에서부터 탐색하여 마지막 인용구(>) 찾기
+  // 밑에서부터 탐색하여 인용구 기호(>)로 시작하는 마지막 라인을 찾음
   for (let i = lines.length - 1; i >= 0; i--) {
     const line = lines[i].trim();
-    if (line.startsWith('>') && (line.includes('"') || line.includes('“') || line.includes('주님') || line.includes('Lord'))) {
+    if (line.startsWith('>') && line.length > 5) {
+      // 마크다운 인용 기호(>) 및 앞뒤 공백/따옴표 정돈
       return line.replace(/^>\s*/, '').replace(/^["“]|["”]$/g, '').trim();
     }
   }
 
-  // 인용 기호가 없는 경우 마지막 줄 반환
-  const validLines = lines.map(l => l.trim()).filter(l => l.length > 0);
+  // 인용구 기호가 없는 경우 맨 마지막 비어있지 않은 문장 반환
+  const validLines = lines.map(l => l.trim()).filter(l => l.length > 0 && !l.startsWith('#'));
   return validLines.length > 0 ? validLines[validLines.length - 1].replace(/^>\s*/, '') : markdownText;
+}
+
+// 한 파일에 한글/영문이 같이 작성된 경우 영문 인용구 추출 대체 함수
+function extractEnglishPrayerFallback(markdownText) {
+  const lines = markdownText.split('\n');
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[i].trim();
+    if (line.startsWith('>') && (line.includes('Lord') || line.includes('Amen') || /[a-zA-Z]/.test(line))) {
+      return line.replace(/^>\s*/, '').replace(/^["“]|["”]$/g, '').trim();
+    }
+  }
+  return "Lord, make me today one of those who think less of their own pleasure and more of the great need. Amen.";
 }
 
 document.addEventListener('DOMContentLoaded', fetchBilingualPrayer);
