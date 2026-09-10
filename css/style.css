@@ -212,7 +212,8 @@ blockquote cite { display: block; font-family: var(--sans); font-style: normal; 
 .contact-list li { border: 1px solid var(--line); background: #fff; border-radius: var(--radius); padding: 22px 24px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; }
 .contact-list li strong { display: block; font-weight: 600; }
 .contact-list li span { color: var(--ink-2); font-size: .95rem; }
-.contact-list a.link { color: var(--accent); font-weight: 600; }
+a.link { color: var(--accent); font-weight: 600; }
+a.link:hover { text-decoration: underline; }
 form.contact { display: grid; gap: 14px; }
 form.contact label { display: grid; gap: 6px; font-size: .9rem; font-weight: 600; }
 form.contact input, form.contact textarea, form.contact select {
