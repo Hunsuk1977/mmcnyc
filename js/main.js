@@ -103,6 +103,8 @@ async function fetchBulletproofPrayer() {
   if (dateEl) dateEl.textContent = todayStr;
 
   const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
+  const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.en.md`;
+
   
   const koEl = document.getElementById('prayer-text-ko');
   const enEl = document.getElementById('prayer-text-en');
