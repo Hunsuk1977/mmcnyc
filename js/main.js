@@ -97,72 +97,76 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-async function fetchBilingualPrayerSeparateFiles() {
-  const todayStr = getTodayString(); // 예: '2026-09-10'
-  
+async function loadBilingualPrayer() {
+  const todayStr = getTodayString(); // '2026-09-10'
+
   const dateEl = document.getElementById('prayer-date');
   if (dateEl) dateEl.textContent = todayStr;
 
   const koEl = document.getElementById('prayer-text-ko');
   const enEl = document.getElementById('prayer-text-en');
 
-  // 강제 노출 설정
+  // 강제 노출
   if (koEl) koEl.style.display = 'block';
   if (enEl) enEl.style.display = 'block';
 
-  // 1. 한국어 파일: YYYY-MM-DD.md
-  const koUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
-  
-  // 2. 영어 파일: YYYY-MM-DD.en.md
-  const enUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.en.md`;
+  const baseUrl = 'https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations';
+  const koUrl = `${baseUrl}/${todayStr}.md`;
+  const enUrl = `${baseUrl}/${todayStr}.en.md`;
 
-  // ----------------------------------------------------
-  // 한국어 기도문 로드
-  // ----------------------------------------------------
-  try {
-    const resKo = await fetch(koUrl);
-    if (resKo.ok) {
-      const textKo = await resKo.text();
-      if (koEl) koEl.innerText = extractPrayerText(textKo);
-    } else {
-      if (koEl) koEl.innerText = "오늘 날짜의 한국어 기도문 파일이 존재하지 않습니다.";
+  // 1. 한국어 파일 독립 로딩
+  (async () => {
+    try {
+      const res = await fetch(koUrl);
+      if (res.ok) {
+        const text = await res.text();
+        if (koEl) koEl.innerText = parsePrayerParagraph(text);
+      } else {
+        if (koEl) koEl.innerText = `오늘 날짜 파일(${todayStr}.md)을 찾을 수 없습니다.`;
+      }
+    } catch (e) {
+      console.error('KO error:', e);
+      if (koEl) koEl.innerText = '한국어 기도문 로딩 실패';
     }
-  } catch (err) {
-    console.error('KO Prayer fetch error:', err);
-    if (koEl) koEl.innerText = "한국어 기도문을 불러오는 중 오류가 발생했습니다.";
-  }
+  })();
 
-  // ----------------------------------------------------
-  // 영어 기도문 로드 (YYYY-MM-DD.en.md)
-  // ----------------------------------------------------
-  try {
-    const resEn = await fetch(enUrl);
-    if (resEn.ok) {
-      const textEn = await resEn.text();
-      if (enEl) enEl.innerText = extractPrayerText(textEn);
-    } else {
-      if (enEl) enEl.innerText = "Today's English prayer file (YYYY-MM-DD.en.md) was not found.";
+  // 2. 영어 파일 독립 로딩 (2026-09-10.en.md)
+  (async () => {
+    try {
+      const res = await fetch(enUrl);
+      if (res.ok) {
+        const text = await res.text();
+        if (enEl) enEl.innerText = parsePrayerParagraph(text);
+      } else {
+        if (enEl) enEl.innerText = `Today's English file (${todayStr}.en.md) was not found.`;
+      }
+    } catch (e) {
+      console.error('EN error:', e);
+      if (enEl) enEl.innerText = 'Failed to load English prayer.';
     }
-  } catch (err) {
-    console.error('EN Prayer fetch error:', err);
-    if (enEl) enEl.innerText = "Failed to load English prayer.";
-  }
+  })();
 }
 
-// 각 마크다운 파일에서 기도문 추출하는 함수
-function extractPrayerText(markdownText) {
-  const paragraphs = markdownText.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
+// 안전하게 맨 마지막 기도 문단을 뽑아내는 함수
+function parsePrayerParagraph(text) {
+  if (!text || typeof text !== 'string') return '';
   
-  // 맨 하단 문단들 중 최하단 문단을 가져오고 불필요한 마크다운 기호 제거
-  if (paragraphs.length > 0) {
-    const lastParagraph = paragraphs[paragraphs.length - 1];
-    return lastParagraph.replace(/^[>#]+\s*/gm, '').replace(/^["“]|["”]$/g, '').trim();
+  // 줄바꿈 기준으로 나누어 가장 아래에 위치한 문단/인용구 파싱
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  
+  // 뒤에서부터 탐색하여 인용구('>')나 일반 텍스트 문장 추출
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[i];
+    // 마크다운 제목(#)이나 구절 출처 식별자 등 제외
+    if (!line.startsWith('#') && line.length > 5) {
+      return line.replace(/^>\s*/, '').replace(/^["“]|["”]$/g, '').trim();
+    }
   }
   
-  return markdownText.trim();
+  return text.trim();
 }
 
-document.addEventListener('DOMContentLoaded', fetchBilingualPrayerSeparateFiles);
+document.addEventListener('DOMContentLoaded', loadBilingualPrayer);
   
   // Contact form -> opens the visitor's mail app with the message prefilled.
   // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
