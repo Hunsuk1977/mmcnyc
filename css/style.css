@@ -167,6 +167,20 @@ section { padding-block: 88px; }
 .mock .langs span { font-size: .72rem; padding: 4px 10px; border-radius: 999px; border: 1px solid #333; color: #bbb; }
 .mock .langs span.on { background: #fff; color: #111; border-color: #fff; }
 
+/* Parallax section background */
+.parallax { position: relative; overflow: hidden; isolation: isolate; }
+.parallax-bg {
+  position: absolute; left: 0; right: 0; top: -18%; bottom: -18%;
+  background-size: cover; background-position: center;
+  opacity: .22; z-index: 0; pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+/* Text sits on solid cards already, but give the heading itself a readable
+   backdrop since it sits directly over the image. */
+.parallax .section-head { position: relative; }
+@media (prefers-reduced-motion: reduce) { .parallax-bg { top: 0; bottom: 0; } }
+
 /* Demo video */
 .demo { margin: 64px auto 0; max-width: 920px; }
 .demo .frame {
