@@ -172,7 +172,7 @@ section { padding-block: 88px; }
 .parallax-bg {
   position: absolute; left: 0; right: 0; top: -18%; bottom: -18%;
   background-size: cover; background-position: center;
-  opacity: .22; z-index: 0; pointer-events: none;
+  opacity: .42; z-index: 0; pointer-events: none;
   transform: translate3d(0, 0, 0);
   will-change: transform;
 }
