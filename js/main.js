@@ -98,38 +98,37 @@ function getTodayString() {
 
 async function fetchDailyPrayerFromGithub() {
   const todayStr = getTodayString();
-  
-  // 카드의 날짜 업데이트
-  const dateEl = document.getElementById('prayer-date');
-  if (dateEl) dateEl.textContent = todayStr;
-
-  // GitHub Raw Markdown 경로
-  // 파일 구조에 따라 알맞은 URL을 선택하세요.
   const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
+
+  const koEl = document.getElementById('prayer-text-ko');
+  const enEl = document.getElementById('prayer-text-en');
 
   try {
     const response = await fetch(rawUrl);
-    
     if (!response.ok) {
-      throw new Error(`파일을 찾을 수 없습니다. (Status: ${response.status})`);
+      if (koEl) koEl.innerText = "오늘 날짜의 기도문 파일이 존재하지 않습니다.";
+      return;
     }
 
-    const markdownText = await response.text();
+    const text = await response.text();
 
-    // Markdown 본문에서 '기도' 섹션 파싱
-    const prayerKo = parsePrayerSection(markdownText, 'ko');
-    const prayerEn = parsePrayerSection(markdownText, 'en');
-
-    const koEl = document.getElementById('prayer-text-ko');
-    const enEl = document.getElementById('prayer-text-en');
+    // 마크다운에서 '기도' 섹션 간단 파싱
+    // 파일 내용 중 '## 기도' 또는 '### 기도' 다음 텍스트 추출
+    let prayerKo = text;
+    if (text.includes('기도')) {
+      const parts = text.split(/#+\s*기도/i);
+      if (parts.length > 1) {
+        // '기도' 헤더 다음 내용 중 다음 헤더(#) 전까지 잘라내기
+        prayerKo = parts[1].split(/\n#+/)[0].trim();
+      }
+    }
 
     if (koEl) koEl.innerText = prayerKo;
-    if (enEl) enEl.innerText = prayerEn;
+    if (enEl) enEl.innerText = prayerKo; // 영어 파일이 따로 없을 경우
 
   } catch (error) {
-    console.error('Prayer fetch error:', error);
-    const koEl = document.getElementById('prayer-text-ko');
-    if (koEl) koEl.innerText = "오늘의 기도문 파일이 존재하지 않거나 불러오지 못했습니다.";
+    console.error(error);
+    if (koEl) koEl.innerText = "기도문을 불러오는 중 오류가 발생했습니다.";
   }
 }
 
