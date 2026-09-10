@@ -124,6 +124,28 @@ section { padding-block: 88px; }
 .hero .lede { font-size: 1.25rem; color: var(--ink-2); max-width: 620px; margin-bottom: 2rem; }
 @media (max-width: 800px) { .hero { padding-block: 64px 48px; } .hero .lede { font-size: 1.1rem; } }
 
+/* Hero with a full-bleed video background. The video plays at 70% opacity,
+   blended straight onto the page background per the 22%-style pattern used
+   elsewhere on the site; a dark scrim sits between it and the text so the
+   headline stays readable no matter what the footage is showing at the
+   moment — busy, brightly lit b-roll and static text don't share a palette
+   on their own. */
+.hero-video { position: relative; overflow: hidden; isolation: isolate; color: #fff; }
+.hero-bg-video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: .7; z-index: 0;
+}
+.hero-video::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, rgba(10, 12, 16, .62), rgba(10, 12, 16, .42) 45%, rgba(10, 12, 16, .68));
+}
+.hero-video .container { position: relative; z-index: 2; }
+.hero-video .eyebrow { color: #bcd6f2; }
+.hero-video .lede { color: rgba(255, 255, 255, .86); }
+.hero-video .btn.secondary { border-color: rgba(255, 255, 255, .7); color: #fff; }
+.hero-video .btn.secondary:hover { background: rgba(255, 255, 255, .12); }
+@media (prefers-reduced-motion: reduce) { .hero-bg-video { display: none; } .hero-video { background: #171614; } }
+
 /* Grid cards */
 .grid { display: grid; gap: 20px; grid-template-columns: repeat(3, 1fr); }
 .grid.two { grid-template-columns: repeat(2, 1fr); }
@@ -172,7 +194,7 @@ section { padding-block: 88px; }
 .parallax-bg {
   position: absolute; left: 0; right: 0; top: -18%; bottom: -18%;
   background-size: cover; background-position: center;
-  opacity: .42; z-index: 0; pointer-events: none;
+  opacity: .22; z-index: 0; pointer-events: none;
   transform: translate3d(0, 0, 0);
   will-change: transform;
 }
