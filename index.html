@@ -132,34 +132,36 @@
     <p style="margin-top:28px"><a class="btn secondary" href="vision/"><span class="en">Read the full vision</span><span class="ko">비전 전체 읽기</span> →</a></p>
   </div>
 </section>
+
 <section class="daily-prayer-section">
   <div class="prayer-card">
     <div class="prayer-header">
       <div class="badge-group">
-        <span class="live-badge">DAILY</span>
+        <span class="live-badge">DAILY PRAYER</span>
         <span class="prayer-date" id="prayer-date">2026-09-10</span>
-      </div>
-      <!-- 언어 전환 토글 버튼 -->
-      <div class="lang-toggle">
-        <button id="btn-ko" class="active" onclick="switchPrayerLang('ko')">한국어</button>
-        <button id="btn-en" onclick="switchPrayerLang('en')">EN</button>
       </div>
     </div>
 
-    <h2 id="prayer-title">오늘의 기도 · Daily Prayer</h2>
+    <h2>오늘의 기도 · Daily Prayer</h2>
 
-    <div class="prayer-content">
-      <p id="prayer-text-ko" class="prayer-text active">
-        <!-- 한국어 기도가 여기에 로딩됩니다 -->
-        기도문을 불러오는 중입니다...
-      </p>
-      <p id="prayer-text-en" class="prayer-text">
-        <!-- 영어 기도가 여기에 로딩됩니다 -->
-        Loading prayer...
-      </p>
+    <div class="prayer-content-bilingual">
+      <!-- 한국어 기도문 -->
+      <div class="prayer-box ko">
+        <span class="lang-label">KO</span>
+        <p id="prayer-text-ko">기도문을 불러오는 중입니다...</p>
+      </div>
+
+      <hr class="prayer-divider" />
+
+      <!-- 영어 기도문 -->
+      <div class="prayer-box en">
+        <span class="lang-label">EN</span>
+        <p id="prayer-text-en">Loading prayer...</p>
+      </div>
     </div>
   </div>
 </section>
+  
 <section>
   <div class="container">
     <blockquote>
