@@ -96,81 +96,63 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-async function fetchDailyPrayerFromGithub() {
-  const todayStr = getTodayString();
-  const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
+async function fetchBilingualPrayer() {
+  const todayStr = getTodayString(); // '2026-09-10'
+  
+  const dateEl = document.getElementById('prayer-date');
+  if (dateEl) dateEl.textContent = todayStr;
+
+  // GitHub Raw Markdown 경로
+  const rawKoUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
+  const rawEnUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}_en.md`;
 
   const koEl = document.getElementById('prayer-text-ko');
   const enEl = document.getElementById('prayer-text-en');
 
   try {
-    const response = await fetch(rawUrl);
-    if (!response.ok) {
-      if (koEl) koEl.innerText = "오늘 날짜의 기도문 파일이 존재하지 않습니다.";
-      return;
+    // 1. 한국어 기도문 로드 및 추출
+    const resKo = await fetch(rawKoUrl);
+    if (resKo.ok) {
+      const textKo = await resKo.text();
+      if (koEl) koEl.innerText = extractPrayerQuote(textKo);
+    } else {
+      if (koEl) koEl.innerText = "오늘 날짜의 한국어 기도문이 없습니다.";
     }
 
-    const text = await response.text();
-
-    // 마크다운에서 '기도' 섹션 간단 파싱
-    // 파일 내용 중 '## 기도' 또는 '### 기도' 다음 텍스트 추출
-    let prayerKo = text;
-    if (text.includes('기도')) {
-      const parts = text.split(/#+\s*기도/i);
-      if (parts.length > 1) {
-        // '기도' 헤더 다음 내용 중 다음 헤더(#) 전까지 잘라내기
-        prayerKo = parts[1].split(/\n#+/)[0].trim();
-      }
+    // 2. 영어 기도문 로드 및 추출
+    const resEn = await fetch(rawEnUrl);
+    if (resEn.ok) {
+      const textEn = await resEn.text();
+      if (enEl) enEl.innerText = extractPrayerQuote(textEn);
+    } else {
+      // 영어 전용 파일이 없을 경우 한국어 파일 내의 영어 텍스트를 파싱하거나 기본 처리
+      if (enEl) enEl.innerText = "English prayer version is currently unavailable.";
     }
-
-    if (koEl) koEl.innerText = prayerKo;
-    if (enEl) enEl.innerText = prayerKo; // 영어 파일이 따로 없을 경우
 
   } catch (error) {
-    console.error(error);
+    console.error('Prayer Fetch Error:', error);
     if (koEl) koEl.innerText = "기도문을 불러오는 중 오류가 발생했습니다.";
   }
 }
 
-// Markdown에서 '## 기도' 또는 '## Prayer' 헤더 아래 문장 추출 함수
-function parsePrayerSection(text, lang) {
-  const lines = text.split('\n');
-  let isPrayerSection = false;
-  let prayerContent = [];
-
-  const targetHeader = lang === 'ko' ? ['기도', '오늘의 기도'] : ['prayer', 'daily prayer'];
-
-  for (let line of lines) {
-    const trimmed = line.trim();
-
-    // 헤더 체크 (e.g., ## 기도 / ### Prayer)
-    if (trimmed.startsWith('#')) {
-      const headerText = trimmed.replace(/^#+\s*/, '').toLowerCase();
-      if (targetHeader.some(h => headerText.includes(h))) {
-        isPrayerSection = true;
-        continue;
-      } else if (isPrayerSection) {
-        // 다음 다른 헤더를 만나면 추출 종료
-        break;
-      }
-    }
-
-    if (isPrayerSection && trimmed !== '') {
-      prayerContent.push(trimmed);
+// 마크다운에서 맨 마지막 기도문(인용구 `> "..."`)만 추출하는 함수
+function extractPrayerQuote(markdownText) {
+  const lines = markdownText.split('\n');
+  
+  // 파일 맨 밑에서부터 탐색하여 마지막 인용구(>) 찾기
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[i].trim();
+    if (line.startsWith('>') && (line.includes('"') || line.includes('“') || line.includes('주님') || line.includes('Lord'))) {
+      return line.replace(/^>\s*/, '').replace(/^["“]|["”]$/g, '').trim();
     }
   }
 
-  // 섹션 분리가 안 되어 있거나 텍스트 전체일 경우의 기본 처리
-  if (prayerContent.length === 0) {
-    return lang === 'ko' ? text.trim() : "Prayer content not found in markdown.";
-  }
-
-  return prayerContent.join('\n');
+  // 인용 기호가 없는 경우 마지막 줄 반환
+  const validLines = lines.map(l => l.trim()).filter(l => l.length > 0);
+  return validLines.length > 0 ? validLines[validLines.length - 1].replace(/^>\s*/, '') : markdownText;
 }
 
-// 페이지 로드 시 실행
-document.addEventListener('DOMContentLoaded', fetchDailyPrayerFromGithub);
-
+document.addEventListener('DOMContentLoaded', fetchBilingualPrayer);
   
   // Contact form -> opens the visitor's mail app with the message prefilled.
   // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
