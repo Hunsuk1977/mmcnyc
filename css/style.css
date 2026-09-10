@@ -269,43 +269,86 @@ form.contact input, form.contact textarea, form.contact select {
 form.contact input:focus, form.contact textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
 form.contact .hp { position: absolute; left: -9999px; }
 
-.prayer-content-bilingual {
+.daily-prayer-section {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.prayer-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+}
+
+.prayer-header {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 16px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
-.prayer-box {
-  position: relative;
-  padding-left: 36px;
-}
-
-.lang-label {
-  position: absolute;
-  left: 0;
-  top: 2px;
+.live-badge {
+  background-color: #111827;
+  color: #ffffff;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #9ca3af;
-  background: #f3f4f6;
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
 }
 
-.prayer-box p {
-  font-size: 1.05rem;
-  line-height: 1.6;
+.prayer-date {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.prayer-card h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 32px;
+}
+
+.prayer-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.prayer-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lang-tag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4b5563;
+  background: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.prayer-text {
+  font-size: 1.25rem; /* 글씨를 시원하게 키움 */
+  line-height: 1.7;
   color: #1f2937;
   margin: 0;
+  word-break: keep-all;
 }
 
 .prayer-divider {
   border: 0;
-  border-top: 1px dashed #e5e7eb;
-  margin: 4px 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0;
 }
-
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--line); padding-block: 48px; font-size: .92rem; color: var(--ink-2); }
