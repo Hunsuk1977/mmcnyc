@@ -42,6 +42,19 @@
   // Footer year
   document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
+  // Demo video: it loops on its own as an illustration, but never for someone
+  // who has asked their system to reduce motion — they get a still first frame
+  // and the controls to start it themselves.
+  try {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.demo video').forEach(function (v) {
+        v.autoplay = false;
+        v.loop = false;
+        v.pause();
+      });
+    }
+  } catch (e) {}
+
   // Contact form -> opens the visitor's mail app with the message prefilled.
   // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
   // To switch to Netlify Forms instead, see README.md.
