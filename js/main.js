@@ -106,7 +106,6 @@ async function loadBilingualPrayer() {
   const koEl = document.getElementById('prayer-text-ko');
   const enEl = document.getElementById('prayer-text-en');
 
-  // 강제 노출
   if (koEl) koEl.style.display = 'block';
   if (enEl) enEl.style.display = 'block';
 
@@ -114,13 +113,13 @@ async function loadBilingualPrayer() {
   const koUrl = `${baseUrl}/${todayStr}.md`;
   const enUrl = `${baseUrl}/${todayStr}.en.md`;
 
-  // 1. 한국어 파일 독립 로딩
+  // 1. 한국어 기도문 로드
   (async () => {
     try {
       const res = await fetch(koUrl);
       if (res.ok) {
         const text = await res.text();
-        if (koEl) koEl.innerText = parsePrayerParagraph(text);
+        if (koEl) koEl.innerText = parseSmartPrayerText(text, 'ko');
       } else {
         if (koEl) koEl.innerText = `오늘 날짜 파일(${todayStr}.md)을 찾을 수 없습니다.`;
       }
@@ -130,13 +129,13 @@ async function loadBilingualPrayer() {
     }
   })();
 
-  // 2. 영어 파일 독립 로딩 (2026-09-10.en.md)
+  // 2. 영어 기도문 로드 (2026-09-10.en.md)
   (async () => {
     try {
       const res = await fetch(enUrl);
       if (res.ok) {
         const text = await res.text();
-        if (enEl) enEl.innerText = parsePrayerParagraph(text);
+        if (enEl) enEl.innerText = parseSmartPrayerText(text, 'en');
       } else {
         if (enEl) enEl.innerText = `Today's English file (${todayStr}.en.md) was not found.`;
       }
@@ -147,23 +146,48 @@ async function loadBilingualPrayer() {
   })();
 }
 
-// 안전하게 맨 마지막 기도 문단을 뽑아내는 함수
-function parsePrayerParagraph(text) {
+// 💡 지혜로운 기도문 필터링 함수
+function parseSmartPrayerText(text, lang) {
   if (!text || typeof text !== 'string') return '';
+
+  // 1. 엔터 두 번(빈 줄) 기준 문단 분리
+  const paragraphs = text.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
   
-  // 줄바꿈 기준으로 나누어 가장 아래에 위치한 문단/인용구 파싱
-  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-  
-  // 뒤에서부터 탐색하여 인용구('>')나 일반 텍스트 문장 추출
-  for (let i = lines.length - 1; i >= 0; i--) {
-    const line = lines[i];
-    // 마크다운 제목(#)이나 구절 출처 식별자 등 제외
-    if (!line.startsWith('#') && line.length > 5) {
-      return line.replace(/^>\s*/, '').replace(/^["“]|["”]$/g, '').trim();
+  // 저작권 및 출처 제외 단어 목록
+  const excludeKeywords = [
+    'copyright', 'reprinted', 'permission', 'wingspread', 'zur ltd',
+    'all rights reserved', 'compiled by', 'used by permission'
+  ];
+
+  // 2. 뒤에서부터 문단을 탐색하며 조건 검사
+  for (let i = paragraphs.length - 1; i >= 0; i--) {
+    const p = paragraphs[i];
+    const lowerP = p.toLowerCase();
+
+    // 조건 A: 저작권/출처 문구 제외
+    const isCopyright = excludeKeywords.some(keyword => lowerP.includes(keyword));
+    if (isCopyright) continue;
+
+    // 조건 B: 마크다운 제목(#) 제외
+    if (p.startsWith('#')) continue;
+
+    // 조건 C: 인용구(>)로 지정된 기도문 우선 파싱
+    if (p.includes('>')) {
+      const quoteLines = p.split('\n')
+                          .filter(line => line.trim().startsWith('>'))
+                          .map(line => line.trim().replace(/^>\s*/, '').replace(/^["“]|["”]$/g, ''))
+                          .join(' ');
+      if (quoteLines.length > 0) return quoteLines;
+    }
+
+    // 조건 D: 일반 기도문 문단 반환 (마크다운 기호 제거)
+    const cleanParagraph = p.replace(/^[>#]+\s*/gm, '').replace(/^["“]|["”]$/g, '').trim();
+    if (cleanParagraph.length > 10) {
+      return cleanParagraph;
     }
   }
-  
-  return text.trim();
+
+  return lang === 'ko' ? "기도문을 찾을 수 없습니다." : "Prayer text not found.";
 }
 
 document.addEventListener('DOMContentLoaded', loadBilingualPrayer);
