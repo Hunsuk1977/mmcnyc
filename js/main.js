@@ -68,6 +68,12 @@
     updateParallax();
   }
 
+  // Hero background videos marked "slow" play back at a gentler pace so they
+  // read as ambient motion rather than footage.
+  document.querySelectorAll('.hero-bg-video.slow').forEach(function (v) {
+    v.playbackRate = 0.6;
+  });
+
   // Demo video: it loops on its own as an illustration, but never for someone
   // who has asked their system to reduce motion — they get a still first frame
   // and the controls to start it themselves.
