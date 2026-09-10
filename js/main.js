@@ -87,7 +87,7 @@
     }
   } catch (e) {}
 
-// 현재 접속 날짜 (YYYY-MM-DD)
+// 접속한 날짜 구하기 (YYYY-MM-DD)
 function getTodayString() {
   const today = new Date();
   const year = today.getFullYear();
@@ -96,48 +96,81 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-async function fetchDailyPrayer() {
+async function fetchDailyPrayerFromGithub() {
   const todayStr = getTodayString();
   
-  // 날짜 표시 업데이트
+  // 카드의 날짜 업데이트
   const dateEl = document.getElementById('prayer-date');
   if (dateEl) dateEl.textContent = todayStr;
 
-  // CORS 우회를 위한 Proxy URL
-  const targetKoUrl = encodeURIComponent(`https://devotion-gamma.vercel.app/ko/${todayStr}`);
-  const targetEnUrl = encodeURIComponent(`https://devotion-gamma.vercel.app/en/${todayStr}`);
+  // GitHub Raw Markdown 경로
+  // 파일 구조에 따라 알맞은 URL을 선택하세요.
+  const rawUrl = `https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/${todayStr}.md`;
 
   try {
-    // 1. 한국어 데이터 요청 (CORS Proxy 경유)
-    const resKo = await fetch(`https://api.allorigins.win/get?url=${targetKoUrl}`);
-    const dataKo = await resKo.json();
+    const response = await fetch(rawUrl);
     
-    // 2. 영어 데이터 요청 (CORS Proxy 경유)
-    const resEn = await fetch(`https://api.allorigins.win/get?url=${targetEnUrl}`);
-    const dataEn = await resEn.json();
+    if (!response.ok) {
+      throw new Error(`파일을 찾을 수 없습니다. (Status: ${response.status})`);
+    }
 
-    // DOMParser를 통해 HTML 해석
-    const parser = new DOMParser();
-    const docKo = parser.parseFromString(dataKo.contents, 'text/html');
-    const docEn = parser.parseFromString(dataEn.contents, 'text/html');
+    const markdownText = await response.text();
 
-    // devotion-gamma 페이지 본문 내용 또는 특정 기도 태그 파싱
-    // (페이지 내 기도 텍스트가 들어있는 p 태그나 특정 클래스를 추출)
-    const prayerKoText = docKo.querySelector('main, article, p')?.textContent || "오늘의 기도문을 찾을 수 없습니다.";
-    const prayerEnText = docEn.querySelector('main, article, p')?.textContent || "Prayer text not found.";
+    // Markdown 본문에서 '기도' 섹션 파싱
+    const prayerKo = parsePrayerSection(markdownText, 'ko');
+    const prayerEn = parsePrayerSection(markdownText, 'en');
 
     const koEl = document.getElementById('prayer-text-ko');
     const enEl = document.getElementById('prayer-text-en');
 
-    if (koEl) koEl.innerText = prayerKoText.trim();
-    if (enEl) enEl.innerText = prayerEnText.trim();
+    if (koEl) koEl.innerText = prayerKo;
+    if (enEl) enEl.innerText = prayerEn;
 
   } catch (error) {
     console.error('Prayer fetch error:', error);
     const koEl = document.getElementById('prayer-text-ko');
-    if (koEl) koEl.innerText = "기도문을 불러오는 중 오류가 발생했습니다. (CORS 또는 네트워크 오류)";
+    if (koEl) koEl.innerText = "오늘의 기도문 파일이 존재하지 않거나 불러오지 못했습니다.";
   }
 }
+
+// Markdown에서 '## 기도' 또는 '## Prayer' 헤더 아래 문장 추출 함수
+function parsePrayerSection(text, lang) {
+  const lines = text.split('\n');
+  let isPrayerSection = false;
+  let prayerContent = [];
+
+  const targetHeader = lang === 'ko' ? ['기도', '오늘의 기도'] : ['prayer', 'daily prayer'];
+
+  for (let line of lines) {
+    const trimmed = line.trim();
+
+    // 헤더 체크 (e.g., ## 기도 / ### Prayer)
+    if (trimmed.startsWith('#')) {
+      const headerText = trimmed.replace(/^#+\s*/, '').toLowerCase();
+      if (targetHeader.some(h => headerText.includes(h))) {
+        isPrayerSection = true;
+        continue;
+      } else if (isPrayerSection) {
+        // 다음 다른 헤더를 만나면 추출 종료
+        break;
+      }
+    }
+
+    if (isPrayerSection && trimmed !== '') {
+      prayerContent.push(trimmed);
+    }
+  }
+
+  // 섹션 분리가 안 되어 있거나 텍스트 전체일 경우의 기본 처리
+  if (prayerContent.length === 0) {
+    return lang === 'ko' ? text.trim() : "Prayer content not found in markdown.";
+  }
+
+  return prayerContent.join('\n');
+}
+
+// 페이지 로드 시 실행
+document.addEventListener('DOMContentLoaded', fetchDailyPrayerFromGithub);
 
   
   // Contact form -> opens the visitor's mail app with the message prefilled.
