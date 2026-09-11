@@ -273,7 +273,7 @@ form.contact .hp { position: absolute; left: -9999px; }
 
 .daily-prayer-head {
 display: flex;
-align-items: left;
+align-items: center;
 margin-top: 20px;
 }
 .daily-prayer-head .eyebrow { margin-bottom: 0; }
