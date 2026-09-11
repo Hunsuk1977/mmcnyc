@@ -301,3 +301,33 @@ form.contact .hp { position: absolute; left: -9999px; }
 .prose p { font-size: 1.08rem; color: var(--ink-2); }
 .prose p strong { color: var(--ink); }
 hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+/* ---------- Vision: four pieces converging into one platform ----------
+   A stem drops from each card, the stems meet on a single rule, and one
+   arrow carries them down into the platform panel. Drawn with borders
+   rather than an SVG so the hairlines stay crisp at any width. */
+.converge { position: relative; height: 66px; --flow: rgba(31, 78, 121, 0.3); }
+.converge-stems { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; height: 30px; }
+.converge-stems span { justify-self: center; width: 1px; height: 100%; background: var(--flow); }
+/* Runs from the centre of the first card to the centre of the last: half a
+   column in from each edge, allowing for the three 20px gaps between them. */
+.converge-bar { position: absolute; top: 30px; height: 1px; background: var(--flow);
+  left: calc((100% - 60px) / 8); right: calc((100% - 60px) / 8); }
+.converge-drop { position: absolute; top: 30px; left: 50%; width: 1px; height: 28px; background: var(--flow); }
+.converge-drop::after { content: ""; position: absolute; left: 50%; bottom: -1px; width: 8px; height: 8px;
+  border-right: 1.5px solid var(--flow); border-bottom: 1.5px solid var(--flow);
+  transform: translate(-50%, 0) rotate(45deg); }
+
+.platform-sum { background: var(--accent-soft); border: 1px solid rgba(31, 78, 121, 0.16);
+  border-radius: var(--radius); padding: 38px 32px; text-align: center; }
+.platform-sum h3 { font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 12px 0; }
+.platform-sum p { margin: 0 auto; max-width: 640px; color: var(--ink-2); }
+
+/* Below the four-column grid the stems no longer line up with anything, so
+   they give way to a single arrow. */
+@media (max-width: 900px) {
+  .converge { height: 44px; }
+  .converge-stems, .converge-bar { display: none; }
+  .converge-drop { top: 4px; height: 30px; }
+  .platform-sum { padding: 30px 22px; }
+}
