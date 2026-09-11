@@ -108,9 +108,6 @@ if (dateEl) dateEl.textContent = todayStr;
 const koEl = document.getElementById('prayer-text-ko');
 const enEl = document.getElementById('prayer-text-en');
 
-if (koEl) koEl.style.display = 'block';
-if (enEl) enEl.style.display = 'block';
-
 const baseUrl = 'https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations';
 const koUrl = `${baseUrl}/${todayStr}.md?_=${Date.now()}`;
 const enUrl = `${baseUrl}/${todayStr}.en.md?_=${Date.now()}`;
