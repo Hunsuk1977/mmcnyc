@@ -274,10 +274,7 @@ form.contact .hp { position: absolute; left: -9999px; }
 .daily-prayer-head {
 display: flex;
 align-items: left;
-justify-content: space-between;
-flex-wrap: wrap;
-gap: 8px;
-margin-bottom: 10px;
+margin-top: 10px;
 }
 .daily-prayer-head .eyebrow { margin-bottom: 0; }
 .daily-prayer-head .prayer-date { color: var(--ink-3); }
