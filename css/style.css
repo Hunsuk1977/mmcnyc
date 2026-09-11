@@ -289,7 +289,7 @@ border-radius: var(--radius);
 padding: 44px 40px;
 max-width: none;
 }
-@media (max-width: 600px) { .prayer-quote { padding: 32px 24px; } }
+@media (max-width: 800px) { .prayer-quote { padding: 32px 24px; } }
 
 .prayer-quote .prayer-text-ko {
 font-family: var(--serif);
