@@ -346,7 +346,9 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
 }
 .prayer-video::after {
   content: ""; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(180deg, #f3f1ea, rgba(243, 241, 234, .4) 40%, rgba(243, 241, 234, .58) 60%, #f3f1ea);
+  background: linear-gradient(180deg, #f3f1ea 0%, rgba(243, 241, 234, 0.25) 30%, 
+    rgba(243, 241, 234, 0.15) 50%, 
+    rgba(243, 241, 234, 0.25) 70%,, #f3f1ea 100%);
 }
 .prayer-video .container { position: relative; z-index: 2; }
 .prayer-video .daily-prayer {
