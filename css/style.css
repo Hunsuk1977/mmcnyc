@@ -277,7 +277,7 @@ align-items: baseline;
 justify-content: space-between;
 flex-wrap: wrap;
 gap: 8px;
-margin-bottom: 28px;
+margin-bottom: 10px;
 }
 .daily-prayer-head .eyebrow { margin-bottom: 0; }
 .daily-prayer-head .prayer-date { color: var(--ink-3); }
