@@ -76,6 +76,17 @@
 
   </div>
 
+  <div class="container">
+    <figure class="demo">
+      <div class="frame">
+        <video src="wordalive/wol_demo.mp4" autoplay muted loop playsinline controls
+               preload="metadata" width="1280" height="720"
+               aria-label="Wordalive demo">
+        </video>
+      </div>
+      <figcaption><span class="en">A ten-second look at Wordalive running during a service. Unmute to hear the translated voice.</span><span class="ko">예배 중 실제로 동작하는 Wordalive를 10초 동안 담았습니다. 소리를 켜면 번역된 음성을 들을 수 있습니다.</span></figcaption>
+    </figure>
+  </div>
 </section>
 
 <section>
@@ -116,14 +127,28 @@
       <div class="card"><span class="tag"><span class="en">Live</span><span class="ko">운영 중</span></span><h3><span class="en">Children's Ministry</span><span class="ko">어린이 사역</span></h3><p class="en">A complete bilingual Sunday school curriculum, already free for churches.</p><p class="ko">이미 무료로 제공되는 완전한 이중 언어 주일학교 커리큘럼.</p></div>
       <div class="card"><span class="tag"><span class="en">Available now</span><span class="ko">지금 사용 가능</span></span><h3>Wordalive</h3><p class="en">Real-time sermon translation, subtitles, and voice.</p><p class="ko">실시간 설교 번역·자막·음성.</p></div>
       <div class="card soon"><span class="tag neutral"><span class="en">In development</span><span class="ko">개발 중</span></span><h3><span class="en">Church Websites</span><span class="ko">교회 홈페이지</span></h3><p class="en">Simple, fast sites church staff can edit themselves.</p><p class="ko">교회 스태프가 직접 수정하는 단순하고 빠른 사이트.</p></div>
-      <div class="card soon"><span class="tag neutral"><span class="en">In development</span><span class="ko">개발 중</span></span><h3><span class="en">Daily Devotional</span><span class="ko">매일 묵상</span></h3><p class="en">A distraction-free bilingual devotional reader.</p><p class="ko">군더더기 없는 이중 언어 묵상 리더.</p></div>
+      <div class="card"><span class="tag neutral"><span class="en">Beta</span><span class="ko">베타</span></span><h3><span class="en">Daily Devotional</span><span class="ko">매일 묵상</span></h3><p class="en">A distraction-free bilingual devotional reader — first version live.</p><p class="ko">군더더기 없는 이중 언어 묵상 리더 — 1차 버전 운영 중.</p></div>
     </div>
     <p style="margin-top:28px"><a class="btn secondary" href="vision/"><span class="en">Read the full vision</span><span class="ko">비전 전체 읽기</span> →</a></p>
   </div>
 </section>
 
+<section class="section-alt">
+  <div class="container narrow">
+    <div class="section-head daily-prayer-head">
+      <div class="eyebrow"><span class="en">Daily Prayer</span><span class="ko">오늘의 기도</span></div>
+      <p class="eyebrow" id="prayer-date"></p>
+      <h2><span class="en">A short prayer, every morning.</span><span class="ko">매일 아침, 짧은 기도.</span></h2>
+      <p class="en">Our first tool beyond Wordalive is already live in beta — a minimalist bilingual devotional. Here's the closing prayer from today's reading.</p><p class="ko">Wordalive 다음으로 만든 첫 도구가 베타로 운영을 시작했습니다 — 하루 한 편, 군더더기 없는 이중 언어 묵상입니다. 오늘 묵상의 마지막 기도를 아래에서 보실 수 있습니다.</p>
+    </div>
+    <blockquote class="daily-prayer" id="daily-prayer">
+      <p class="en" data-state="loading">Loading today's prayer…</p>
+      <p class="ko" data-state="loading">오늘의 기도를 불러오는 중입니다…</p>
+    </blockquote>
+    <p style="margin-top:20px"><a class="btn secondary" href="https://devotion-gamma.vercel.app/" target="_blank" rel="noopener"><span class="en">Read today's full devotional</span><span class="ko">오늘의 묵상 전체 보기</span> ↗</a></p>
+  </div>
+</section>
 
-  
 <section>
   <div class="container">
     <blockquote>
@@ -145,21 +170,6 @@
   </div>
 </section>
 
-<section class="section-alt"">
-  <div class="container narrow">
-    
-    <blockquote class="prayer-quote">
-      <p class="prayer-text-ko" id="prayer-text-ko"></p>
-      <p class="prayer-text-en" id="prayer-text-en"></p>
-    </blockquote>
-     <div class="section-head daily-prayer-head">
-      <p class="eyebrow">Daily Prayer </p>
-      <p class="eyebrow" id="prayer-date"></p>
-    </div>
-  </div>
- 
-</section>
-  
 </main>
 <footer class="site-footer">
   <div class="container">
