@@ -285,7 +285,7 @@ margin-bottom: 10px;
 .prayer-quote {
 max-width: none;
 }
-@media (max-width: 800px) { .prayer-quote { padding: 32px 24px; } }
+@media (max-width: 1000px) { .prayer-quote { padding: 32px 24px; } }
 
 .prayer-quote .prayer-text-ko {
 font-family: var(--serif);
@@ -298,7 +298,7 @@ margin: 0 0 16px;
 
 .prayer-quote .prayer-text-en {
 font-family: var(--sans);
-font-size: 1.02rem;
+font-size: 1.3rem;
 line-height: 1.6;
 color: var(--ink-2);
 margin: 0;
