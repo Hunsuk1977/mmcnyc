@@ -339,8 +339,8 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
 .prayer-video { position: relative; overflow: hidden; isolation: isolate; }
 .prayer-bg-video {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; opacity: .9; z-index: 0;
-  filter: blur(8px) saturate(80%);
+  object-fit: cover; opacity: 2; z-index: 0;
+  filter: blur(8px) saturate(90%);
   /* the scale hides the soft edge the blur leaves around the frame */
   transform: scale(1.1);
 }
