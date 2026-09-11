@@ -171,9 +171,9 @@
     }
   }
 
-  // Hero background videos marked "slow" play back at a gentler pace so they
+  // Background videos marked "slow" play back at a gentler pace so they
   // read as ambient motion rather than footage.
-  document.querySelectorAll('.hero-bg-video.slow').forEach(function (v) {
+  document.querySelectorAll('.hero-bg-video.slow, .prayer-bg-video.slow').forEach(function (v) {
     v.playbackRate = 0.6;
   });
 
