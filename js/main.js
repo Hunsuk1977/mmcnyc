@@ -100,7 +100,7 @@ return `${year}-${month}-${day}`;
 }
 
 async function loadBilingualPrayer() {
-const todayStr = getTodayString(); // '2026-09-11'
+const todayStr = getTodayString(); // '(2026-09-11)'
 
 const dateEl = document.getElementById('prayer-date');
 if (dateEl) dateEl.textContent = todayStr;
