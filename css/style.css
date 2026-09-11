@@ -269,85 +269,43 @@ form.contact input, form.contact textarea, form.contact select {
 form.contact input:focus, form.contact textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
 form.contact .hp { position: absolute; left: -9999px; }
 
-.daily-prayer-section {
-  max-width: 800px;
-  margin: 60px auto;
-  padding: 0 20px;
+.daily-prayer { }
+
+.daily-prayer-head {
+display: flex;
+align-items: baseline;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 8px;
+margin-bottom: 28px;
+}
+.daily-prayer-head .eyebrow { margin-bottom: 0; }
+.daily-prayer-head .prayer-date { color: var(--ink-3); }
+
+.prayer-quote {
+background: #fff;
+border: 1px solid var(--line);
+border-radius: var(--radius);
+padding: 44px 40px;
+max-width: none;
+}
+@media (max-width: 600px) { .prayer-quote { padding: 32px 24px; } }
+
+.prayer-quote .prayer-text-ko {
+font-family: var(--serif);
+font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+line-height: 1.5;
+color: var(--ink);
+word-break: keep-all;
+margin: 0 0 16px;
 }
 
-.prayer-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 40px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
-}
-
-.prayer-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.live-badge {
-  background-color: #111827;
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.05em;
-}
-
-.prayer-date {
-  font-size: 0.9rem;
-  color: #6b7280;
-  font-weight: 500;
-}
-
-.prayer-card h2 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 32px;
-}
-
-.prayer-body {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.prayer-item {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.lang-tag {
-  display: inline-block;
-  align-self: flex-start;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #4b5563;
-  background: #f3f4f6;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.prayer-text {
-  font-size: 1.25rem; /* 글씨를 시원하게 키움 */
-  line-height: 1.7;
-  color: #1f2937;
-  margin: 0;
-  word-break: keep-all;
-}
-
-.prayer-divider {
-  border: 0;
-  border-top: 1px solid #e5e7eb;
-  margin: 8px 0;
+.prayer-quote .prayer-text-en {
+font-family: var(--sans);
+font-size: 1.02rem;
+line-height: 1.6;
+color: var(--ink-2);
+margin: 0;
 }
 
 /* Footer */
