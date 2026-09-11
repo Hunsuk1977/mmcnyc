@@ -70,7 +70,7 @@ html[lang="ko"] .en { display: none; }
   height: 64px; gap: 24px;
 }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -0.01em; }
-.brand .mark { width: 28px; height: 28px; }
+.brand .mark { width: 36px; height: 36px; }
 .brand small { font-weight: 400; color: var(--ink-3); font-size: .85rem; }
 .nav { display: flex; align-items: center; gap: 28px; font-size: .95rem; }
 .nav a { color: var(--ink-2); padding: 6px 0; border-bottom: 1px solid transparent; }
