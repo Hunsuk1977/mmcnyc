@@ -89,105 +89,104 @@
 
 // 오늘 날짜 가져오기
 
+// 오늘 날짜 가져오기
+
 function getTodayString() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0');
+return `${year}-${month}-${day}`;
 }
 
 async function loadBilingualPrayer() {
-  const todayStr = getTodayString(); // '2026-09-10'
+const todayStr = getTodayString(); // '2026-09-11'
 
-  const dateEl = document.getElementById('prayer-date');
-  if (dateEl) dateEl.textContent = todayStr;
+const dateEl = document.getElementById('prayer-date');
+if (dateEl) dateEl.textContent = todayStr;
 
-  const koEl = document.getElementById('prayer-text-ko');
-  const enEl = document.getElementById('prayer-text-en');
+const koEl = document.getElementById('prayer-text-ko');
+const enEl = document.getElementById('prayer-text-en');
 
-  if (koEl) koEl.style.display = 'block';
-  if (enEl) enEl.style.display = 'block';
+if (koEl) koEl.style.display = 'block';
+if (enEl) enEl.style.display = 'block';
 
-  const baseUrl = 'https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations';
-  const koUrl = `${baseUrl}/${todayStr}.md`;
-  const enUrl = `${baseUrl}/${todayStr}.en.md`;
+const baseUrl = 'https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations';
+const koUrl = `${baseUrl}/${todayStr}.md?_=${Date.now()}`;
+const enUrl = `${baseUrl}/${todayStr}.en.md?_=${Date.now()}`;
 
-  // 1. 한국어 기도문 로드
-  (async () => {
-    try {
-      const res = await fetch(koUrl);
-      if (res.ok) {
-        const text = await res.text();
-        if (koEl) koEl.innerText = parseSmartPrayerText(text, 'ko');
-      } else {
-        if (koEl) koEl.innerText = `오늘 날짜 파일(${todayStr}.md)을 찾을 수 없습니다.`;
-      }
-    } catch (e) {
-      console.error('KO error:', e);
-      if (koEl) koEl.innerText = '한국어 기도문 로딩 실패';
-    }
-  })();
+// 1. 한국어 기도문 로드
+(async () => {
+try {
+const res = await fetch(koUrl, { cache: 'no-store' });
+if (res.ok) {
+const text = await res.text();
+if (koEl) koEl.innerText = parseSmartPrayerText(text, 'ko');
+} else {
+if (koEl) koEl.innerText = `오늘 날짜 파일(${todayStr}.md)을 찾을 수 없습니다.`;
+}
+} catch (e) {
+console.error('KO error:', e);
+if (koEl) koEl.innerText = '한국어 기도문 로딩 실패';
+}
+})();
 
-  // 2. 영어 기도문 로드 (2026-09-10.en.md)
-  (async () => {
-    try {
-      const res = await fetch(enUrl);
-      if (res.ok) {
-        const text = await res.text();
-        if (enEl) enEl.innerText = parseSmartPrayerText(text, 'en');
-      } else {
-        if (enEl) enEl.innerText = `Today's English file (${todayStr}.en.md) was not found.`;
-      }
-    } catch (e) {
-      console.error('EN error:', e);
-      if (enEl) enEl.innerText = 'Failed to load English prayer.';
-    }
-  })();
+// 2. 영어 기도문 로드
+(async () => {
+try {
+const res = await fetch(enUrl, { cache: 'no-store' });
+if (res.ok) {
+const text = await res.text();
+if (enEl) enEl.innerText = parseSmartPrayerText(text, 'en');
+} else {
+if (enEl) enEl.innerText = `Today's English file (${todayStr}.en.md) was not found.`;
+}
+} catch (e) {
+console.error('EN error:', e);
+if (enEl) enEl.innerText = 'Failed to load English prayer.';
+}
+})();
 }
 
 // 💡 지혜로운 기도문 필터링 함수
 function parseSmartPrayerText(text, lang) {
-  if (!text || typeof text !== 'string') return '';
+if (!text || typeof text !== 'string') return '';
 
-  // 1. 엔터 두 번(빈 줄) 기준 문단 분리
-  const paragraphs = text.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
-  
-  // 저작권 및 출처 제외 단어 목록
-  const excludeKeywords = [
-    'copyright', 'reprinted', 'permission', 'wingspread', 'zur ltd',
-    'all rights reserved', 'compiled by', 'used by permission'
-  ];
+// 1. "### Copyright Information" (또는 "## Copyright" 등) 제목 이전까지만 사용
+const copyrightHeadingRe = /^#+\s*copyright.*$/im;
+const cutIdx = text.search(copyrightHeadingRe);
+const body = cutIdx === -1 ? text : text.slice(0, cutIdx);
 
-  // 2. 뒤에서부터 문단을 탐색하며 조건 검사
-  for (let i = paragraphs.length - 1; i >= 0; i--) {
-    const p = paragraphs[i];
-    const lowerP = p.toLowerCase();
+// 2. 빈 줄(엔터 두 번) 기준 문단 분리
+const paragraphs = body.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
 
-    // 조건 A: 저작권/출처 문구 제외
-    const isCopyright = excludeKeywords.some(keyword => lowerP.includes(keyword));
-    if (isCopyright) continue;
+// 3. 뒤에서부터 훑으며, '>'로 시작하는 줄로만 이루어진 블록(blockquote) 중
+//    가장 마지막 것을 그날의 기도문으로 채택
+for (let i = paragraphs.length - 1; i >= 0; i--) {
+const p = paragraphs[i];
+const lines = p.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+const isBlockquote = lines.length > 0 && lines.every(l => l.startsWith('>'));
+if (!isBlockquote) continue;
 
-    // 조건 B: 마크다운 제목(#) 제외
-    if (p.startsWith('#')) continue;
+const quoteText = lines
+.map(l => l.replace(/^>\s*/, ''))
+.join(' ')
+.replace(/^["“]|["”]$/g, '')
+.replace(/—\s*[\w\s\d:.-]+$/, '') // 끝에 붙는 "—Luke 12:19-21" 같은 출처 표기 제거
+.trim();
 
-    // 조건 C: 인용구(>)로 지정된 기도문 우선 파싱
-    if (p.includes('>')) {
-      const quoteLines = p.split('\n')
-                          .filter(line => line.trim().startsWith('>'))
-                          .map(line => line.trim().replace(/^>\s*/, '').replace(/^["“]|["”]$/g, ''))
-                          .join(' ');
-      if (quoteLines.length > 0) return quoteLines;
-    }
+if (quoteText.length > 10) return quoteText;
+}
 
-    // 조건 D: 일반 기도문 문단 반환 (마크다운 기호 제거)
-    const cleanParagraph = p.replace(/^[>#]+\s*/gm, '').replace(/^["“]|["”]$/g, '').trim();
-    if (cleanParagraph.length > 10) {
-      return cleanParagraph;
-    }
-  }
+// 4. blockquote를 못 찾으면 마지막 일반 문단으로 폴백
+for (let i = paragraphs.length - 1; i >= 0; i--) {
+const p = paragraphs[i];
+if (p.startsWith('#')) continue;
+const clean = p.replace(/^[>#]+\s*/gm, '').trim();
+if (clean.length > 10) return clean;
+}
 
-  return lang === 'ko' ? "기도문을 찾을 수 없습니다." : "Prayer text not found.";
+return lang === 'ko' ? "기도문을 찾을 수 없습니다." : "Prayer text not found.";
 }
 
 document.addEventListener('DOMContentLoaded', loadBilingualPrayer);
