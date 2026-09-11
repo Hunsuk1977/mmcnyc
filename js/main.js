@@ -130,6 +130,23 @@
 
     if (enP) fetchPrayer(base + '.en.md', enP, "Today's prayer isn't posted yet — check back soon.");
     if (koP) fetchPrayer(base + '.md', koP, '오늘의 기도가 아직 준비되지 않았습니다 — 잠시 후 다시 확인해 주세요.');
+
+    // Date line next to the "Daily Prayer" label, in the effective (ET) date
+    // computed above — not a second en/ko pair, just one line that follows
+    // the language toggle directly.
+    var dateEl = document.getElementById('prayer-date');
+    if (dateEl) {
+      var effDate = new Date(dateStr + 'T12:00:00Z'); // noon UTC avoids local-TZ day-shift when formatting
+      var enDateStr = effDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      var koDateStr = effDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+      var renderDate = function () {
+        dateEl.textContent = root.getAttribute('lang') === 'ko' ? koDateStr : enDateStr;
+      };
+      renderDate();
+      document.querySelectorAll('.lang-toggle button').forEach(function (b) {
+        b.addEventListener('click', renderDate);
+      });
+    }
   }
 
   // Hero background videos marked "slow" play back at a gentler pace so they
