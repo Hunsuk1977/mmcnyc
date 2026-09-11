@@ -283,10 +283,6 @@ margin-bottom: 10px;
 .daily-prayer-head .prayer-date { color: var(--ink-3); }
 
 .prayer-quote {
-background: #fff;
-border: 1px solid var(--line);
-border-radius: var(--radius);
-padding: 44px 40px;
 max-width: none;
 }
 @media (max-width: 800px) { .prayer-quote { padding: 32px 24px; } }
