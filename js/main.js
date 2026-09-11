@@ -97,20 +97,44 @@
       return eff.getUTCFullYear() + '-' + pad2(eff.getUTCMonth() + 1) + '-' + pad2(eff.getUTCDate());
     };
     var dateStr = effectiveDateStr();
-    var base = 'https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/' + dateStr;
+  var RAW = 'https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/';
 
-    // The prayer is written as the closing bolded, quoted sentence in the
-    // markdown source: **"..."** (straight or curly quotes). Take the last
-    // one in the file, in case an earlier line is quoted the same way.
-    var extractPrayer = function (text) {
-      if (!text) return null;
-      var matches = text.match(/\*\*["“]([^*]+?)["”]\*\*/g);
-      if (!matches || !matches.length) return null;
-      return matches[matches.length - 1].replace(/^\*\*["“]/, '').replace(/["”]\*\*$/, '').trim();
+  // The devotional repo groups readings into collections (meditations/tozer/…).
+  // Files from before that change still sit directly under meditations/, so try
+  // the collection folder first and fall back to the old flat path.
+  var sourcesFor = function (suffix) {
+    return [RAW + 'tozer/' + dateStr + suffix, RAW + dateStr + suffix];
+  };
+
+  // The closing prayer is the last quoted block of the reading. Across the
+  // source files it appears three ways — as a markdown quote (> "…"), as a
+  // bolded quote (**"…"**), or as a plain quoted paragraph — so match on the
+  // quotation marks rather than the decoration, and skip the copyright line
+  // that sometimes follows it.
+  var extractPrayer = function (text) {
+    if (!text) return null;
+    var body = text.replace(/^---\n[\s\S]*?\n---\n/, '');
+    var blocks = body.split(/\n\s*\n/);
+    for (var i = blocks.length - 1; i >= 0; i--) {
+      var b = blocks[i].replace(/^\s*>\s?/gm, '').replace(/\s+/g, ' ').trim();
+      if (!b) continue;
+      if (/저작권|Copyright|©|reprinted|발췌/i.test(b)) continue;
+      var m = b.match(/^\*{0,2}["“]([\s\S]+)["”]\*{0,2}$/);
+      if (m) return m[1].trim();
+    }
+    return null;
+  };
+
+  // Walks the candidate URLs in order; the empty message is only shown once
+  // every one of them has come up without a prayer.
+  var fetchPrayer = function (urls, el, emptyText) {
+    var giveUp = function () {
+      el.textContent = emptyText;
+      el.setAttribute('data-state', 'empty');
     };
-
-    var fetchPrayer = function (url, el, emptyText) {
-      fetch(url).then(function (res) {
+    var attempt = function (i) {
+      if (i >= urls.length) { giveUp(); return; }
+      fetch(urls[i]).then(function (res) {
         if (!res.ok) throw new Error('not found');
         return res.text();
       }).then(function (text) {
@@ -119,17 +143,15 @@
           el.textContent = '“' + prayer + '”';
           el.removeAttribute('data-state');
         } else {
-          el.textContent = emptyText;
-          el.setAttribute('data-state', 'empty');
+          attempt(i + 1);
         }
-      }).catch(function () {
-        el.textContent = emptyText;
-        el.setAttribute('data-state', 'empty');
-      });
+      }).catch(function () { attempt(i + 1); });
     };
+    attempt(0);
+  };
 
-    if (enP) fetchPrayer(base + '.en.md', enP, "Today's prayer isn't posted yet — check back soon.");
-    if (koP) fetchPrayer(base + '.md', koP, '오늘의 기도가 아직 준비되지 않았습니다 — 잠시 후 다시 확인해 주세요.');
+  if (enP) fetchPrayer(sourcesFor('.en.md'), enP, "Today's prayer isn't posted yet — check back soon.");
+  if (koP) fetchPrayer(sourcesFor('.md'), koP, '오늘의 기도가 아직 준비되지 않았습니다 — 잠시 후 다시 확인해 주세요.');
 
     // Date line next to the "Daily Prayer" label, in the effective (ET) date
     // computed above — not a second en/ko pair, just one line that follows
