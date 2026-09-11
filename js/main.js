@@ -68,6 +68,70 @@
     updateParallax();
   }
 
+  // Daily Prayer: to stay clear of the devotional's copyrighted text, we
+  // don't reproduce the full reading — only the short closing prayer,
+  // pulled straight from today's source file on GitHub, in each language.
+  var prayerEl = document.getElementById('daily-prayer');
+  if (prayerEl) {
+    var enP = prayerEl.querySelector('p.en');
+    var koP = prayerEl.querySelector('p.ko');
+    var pad2 = function (n) { return String(n).padStart(2, '0'); };
+
+    // The devotional source publishes on US Eastern time. Rather than
+    // switching over at each visitor's own local midnight, we hold
+    // yesterday's prayer until 8:00 AM Eastern, then roll over to today's —
+    // matching when the content actually goes up, wherever the visitor is.
+    var effectiveDateStr = function () {
+      var parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', hour12: false
+      }).formatToParts(new Date());
+      var map = {};
+      parts.forEach(function (p) { map[p.type] = p.value; });
+      var y = parseInt(map.year, 10), m = parseInt(map.month, 10), d = parseInt(map.day, 10);
+      var h = parseInt(map.hour, 10);
+      if (h === 24) h = 0; // some environments report midnight as "24"
+      var ms = Date.UTC(y, m - 1, d);
+      if (h < 8) ms -= 24 * 60 * 60 * 1000; // before 8am ET: still show yesterday's
+      var eff = new Date(ms);
+      return eff.getUTCFullYear() + '-' + pad2(eff.getUTCMonth() + 1) + '-' + pad2(eff.getUTCDate());
+    };
+    var dateStr = effectiveDateStr();
+    var base = 'https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations/' + dateStr;
+
+    // The prayer is written as the closing bolded, quoted sentence in the
+    // markdown source: **"..."** (straight or curly quotes). Take the last
+    // one in the file, in case an earlier line is quoted the same way.
+    var extractPrayer = function (text) {
+      if (!text) return null;
+      var matches = text.match(/\*\*["“]([^*]+?)["”]\*\*/g);
+      if (!matches || !matches.length) return null;
+      return matches[matches.length - 1].replace(/^\*\*["“]/, '').replace(/["”]\*\*$/, '').trim();
+    };
+
+    var fetchPrayer = function (url, el, emptyText) {
+      fetch(url).then(function (res) {
+        if (!res.ok) throw new Error('not found');
+        return res.text();
+      }).then(function (text) {
+        var prayer = extractPrayer(text);
+        if (prayer) {
+          el.textContent = '“' + prayer + '”';
+          el.removeAttribute('data-state');
+        } else {
+          el.textContent = emptyText;
+          el.setAttribute('data-state', 'empty');
+        }
+      }).catch(function () {
+        el.textContent = emptyText;
+        el.setAttribute('data-state', 'empty');
+      });
+    };
+
+    if (enP) fetchPrayer(base + '.en.md', enP, "Today's prayer isn't posted yet — check back soon.");
+    if (koP) fetchPrayer(base + '.md', koP, '오늘의 기도가 아직 준비되지 않았습니다 — 잠시 후 다시 확인해 주세요.');
+  }
+
   // Hero background videos marked "slow" play back at a gentler pace so they
   // read as ambient motion rather than footage.
   document.querySelectorAll('.hero-bg-video.slow').forEach(function (v) {
@@ -87,107 +151,6 @@
     }
   } catch (e) {}
 
-// 오늘 날짜 가져오기
-
-// 오늘 날짜 가져오기
-
-function getTodayString() {
-const today = new Date();
-const year = today.getFullYear();
-const month = String(today.getMonth() + 1).padStart(2, '0');
-const day = String(today.getDate()).padStart(2, '0');
-return `${year}-${month}-${day}`;
-}
-
-async function loadBilingualPrayer() {
-const todayStr = getTodayString(); // '(2026-09-11)'
-
-const dateEl = document.getElementById('prayer-date');
-if (dateEl) dateEl.textContent = todayStr;
-
-const koEl = document.getElementById('prayer-text-ko');
-const enEl = document.getElementById('prayer-text-en');
-
-const baseUrl = 'https://raw.githubusercontent.com/Hunsuk1977/devotion/main/meditations';
-const koUrl = `${baseUrl}/${todayStr}.md?_=${Date.now()}`;
-const enUrl = `${baseUrl}/${todayStr}.en.md?_=${Date.now()}`;
-
-// 1. 한국어 기도문 로드
-(async () => {
-try {
-const res = await fetch(koUrl, { cache: 'no-store' });
-if (res.ok) {
-const text = await res.text();
-if (koEl) koEl.innerText = parseSmartPrayerText(text, 'ko');
-} else {
-if (koEl) koEl.innerText = `오늘 날짜 파일(${todayStr}.md)을 찾을 수 없습니다.`;
-}
-} catch (e) {
-console.error('KO error:', e);
-if (koEl) koEl.innerText = '한국어 기도문 로딩 실패';
-}
-})();
-
-// 2. 영어 기도문 로드
-(async () => {
-try {
-const res = await fetch(enUrl, { cache: 'no-store' });
-if (res.ok) {
-const text = await res.text();
-if (enEl) enEl.innerText = parseSmartPrayerText(text, 'en');
-} else {
-if (enEl) enEl.innerText = `Today's English file (${todayStr}.en.md) was not found.`;
-}
-} catch (e) {
-console.error('EN error:', e);
-if (enEl) enEl.innerText = 'Failed to load English prayer.';
-}
-})();
-}
-
-// 💡 지혜로운 기도문 필터링 함수
-function parseSmartPrayerText(text, lang) {
-if (!text || typeof text !== 'string') return '';
-
-// 1. "### Copyright Information" (또는 "## Copyright" 등) 제목 이전까지만 사용
-const copyrightHeadingRe = /^#+\s*copyright.*$/im;
-const cutIdx = text.search(copyrightHeadingRe);
-const body = cutIdx === -1 ? text : text.slice(0, cutIdx);
-
-// 2. 빈 줄(엔터 두 번) 기준 문단 분리
-const paragraphs = body.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
-
-// 3. 뒤에서부터 훑으며, '>'로 시작하는 줄로만 이루어진 블록(blockquote) 중
-//    가장 마지막 것을 그날의 기도문으로 채택
-for (let i = paragraphs.length - 1; i >= 0; i--) {
-const p = paragraphs[i];
-const lines = p.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-const isBlockquote = lines.length > 0 && lines.every(l => l.startsWith('>'));
-if (!isBlockquote) continue;
-
-const quoteText = lines
-.map(l => l.replace(/^>\s*/, ''))
-.join(' ')
-.replace(/^["“]|["”]$/g, '')
-.replace(/—\s*[\w\s\d:.-]+$/, '') // 끝에 붙는 "—Luke 12:19-21" 같은 출처 표기 제거
-.trim();
-
-if (quoteText.length > 10) return quoteText;
-}
-
-// 4. blockquote를 못 찾으면 마지막 일반 문단으로 폴백
-for (let i = paragraphs.length - 1; i >= 0; i--) {
-const p = paragraphs[i];
-if (p.startsWith('#')) continue;
-const clean = p.replace(/^[>#]+\s*/gm, '').trim();
-if (clean.length > 10) return clean;
-}
-
-return lang === 'ko' ? "기도문을 찾을 수 없습니다." : "Prayer text not found.";
-}
-
-document.addEventListener('DOMContentLoaded', loadBilingualPrayer);
-  
   // Contact form -> opens the visitor's mail app with the message prefilled.
   // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
   // To switch to Netlify Forms instead, see README.md.
