@@ -229,6 +229,8 @@ section { padding-block: 88px; }
 .demo figcaption { margin-top: 16px; text-align: center; color: var(--ink-3); font-size: .92rem; }
 @media (max-width: 800px) { .demo { margin-top: 40px; } .demo .frame { border-radius: 14px; } }
 
+.daily-prayer-head #prayer-date { color: var(--ink-3); font-weight: 500; margin-top: -0.8rem; }
+
 /* Daily Prayer */
 .daily-prayer {
   margin-top: 8px; padding: 40px 44px; border-radius: 18px;
