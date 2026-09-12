@@ -58,14 +58,22 @@
       </ul>
     </div>
     <div>
-      <form class="contact" id="contact-form" novalidate>
-        <label><span class="en">Name</span><span class="ko">이름</span><input type="text" name="name" required autocomplete="name"></label>
-        <label><span class="en">Email</span><span class="ko">이메일</span><input type="email" name="email" required autocomplete="email"></label>
-        <label><span class="en">Church / organization</span><span class="ko">교회 / 단체</span><input type="text" name="church" autocomplete="organization"></label>
-        <label><span class="en">Message</span><span class="ko">메시지</span><textarea name="message" rows="6" required></textarea></label>
-        <div><button class="btn accent" type="submit"><span class="en">Compose email</span><span class="ko">이메일 작성하기</span></button></div>
-        <p class="small"><span class="en">This opens your email app with the message ready to send to hello@mmcnyc.org. Prefer to write it yourself? Email us directly at <a class="link" href="mailto:hello@mmcnyc.org">hello@mmcnyc.org</a>.</span><span class="ko">버튼을 누르면 메일 앱이 열리고 hello@mmcnyc.org로 보낼 내용이 채워집니다. 직접 쓰시려면 <a class="link" href="mailto:hello@mmcnyc.org">hello@mmcnyc.org</a>로 보내 주세요.</span>
-      </form>
+     <form class="contact" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+  <!-- Web3Forms Access Key 추가 -->
+  <input type="hidden" name="access_key" value="0d9bcccb-6515-4f81-b06c-62dd694674b2">
+
+  <label><span class="en">Name</span><span class="ko">이름</span><input type="text" name="name" required autocomplete="name"></label>
+  <label><span class="en">Email</span><span class="ko">이메일</span><input type="email" name="email" required autocomplete="email"></label>
+  <label><span class="en">Church / organization</span><span class="ko">교회 / 단체</span><input type="text" name="church" autocomplete="organization"></label>
+  <label><span class="en">Message</span><span class="ko">메시지</span><textarea name="message" rows="6" required></textarea></label>
+  
+  <div><button class="btn accent" type="submit"><span class="en">Send message</span><span class="ko">메시지 보내기</span></button></div>
+  
+  <p class="small">
+    <span class="en">Prefer to write it yourself? Email us directly at <a class="link" href="mailto:hello@mmcnyc.org">hello@mmcnyc.org</a>.</span>
+    <span class="ko">직접 이메일을 보내시려면 <a class="link" href="mailto:hello@mmcnyc.org">hello@mmcnyc.org</a>로 연락해 주세요.</span>
+  </p>
+</form>
     </div>
   </div>
 </section>
