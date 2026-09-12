@@ -190,32 +190,5 @@
     }
   } catch (e) {}
 
-  // Contact form -> opens the visitor's mail app with the message prefilled.
-  // Works on any static host (GitHub Pages, Netlify, S3) since there is no backend.
-  // To switch to Netlify Forms instead, see README.md.
-  var form = document.getElementById('contact-form');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var f = form.elements;
-      var name = (f.name.value || '').trim();
-      var email = (f.email.value || '').trim();
-      var church = (f.church.value || '').trim();
-      var body = (f.message.value || '').trim();
-      if (!name || !email || !body) { form.reportValidity(); return; }
 
-      var ko = root.getAttribute('lang') === 'ko';
-      var subject = 'MMC NYC — ' + (ko ? '문의' : 'Inquiry') + ': ' + name;
-      var lines = [
-        body, '', '—',
-        (ko ? '이름' : 'Name') + ': ' + name,
-        (ko ? '이메일' : 'Email') + ': ' + email
-      ];
-      if (church) lines.push((ko ? '교회/단체' : 'Church/organization') + ': ' + church);
-
-      window.location.href = 'mailto:hello@mmcnyc.org'
-        + '?subject=' + encodeURIComponent(subject)
-        + '&body=' + encodeURIComponent(lines.join('\n'));
-    });
-  }
 })();
