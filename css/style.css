@@ -184,6 +184,11 @@ section { padding-block: 88px; }
 }
 .card .card-visual img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .card.soon { background: transparent; border-style: dashed; }
+
+/* Feature-demo video cards: same card-visual slot, 16:9 screen-capture clips
+   instead of static images. */
+.card .card-visual.video { aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #171614; }
+.card .card-visual.video video { width: 100%; height: 100%; object-fit: cover; display: block; cursor: pointer; }
 .tag {
   display: inline-block; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600;
   padding: 3px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); width: fit-content;
