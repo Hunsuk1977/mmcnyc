@@ -336,50 +336,66 @@
   });
 
   // ---------- Church OBS: scenes switching on the program monitor ----------
+  // Layouts come from a real Church OBS scene file (x, y, w, h as fractions of
+  // the program). Each scene is composed from four sources — camera, slide,
+  // captions, name — and scene changes crossfade like OBS's fade transition.
   document.querySelectorAll('[data-obs-demo]').forEach(function (demo) {
-    // Layouts taken from a real Church OBS scene file (x, y, w, h as fractions).
+    var IMG = demo.getAttribute('data-img') || '../img/';
     var SCENES = [
-      { cam: [.55, 0, .45, 1, 14], slide: [.03, 0, .49, .65], cap: [0, .65, .55, .35], name: 0 },
-      { cam: [0, 0, 1, 1, 0], slide: [.65, .03, .33, .33], cap: [0, .73, 1, .27], name: 0 },
-      { cam: [0, 0, 1, 1, 0], slide: null, cap: [0, .69, 1, .31], name: 0 },
-      { cam: [.68, .66, .28, .28, 6], slide: [0, 0, 1, 1], cap: null, name: 1 },
-      { cam: [0, 0, .45, 1, 0], slide: [.45, 0, .55, .55], cap: [.45, .55, .55, .45], name: 0 }
+      { cam: [.55, 0, .45, 1, 10], slide: [.03, .04, .49, .6, 6], cap: [0, .67, .55, .33] },
+      { wide: [0, 0, 1, 1], slide: [.65, .04, .32, .3, 6], cap: [0, .73, 1, .27] },
+      { wide: [0, 0, 1, 1], cap: [0, .69, 1, .31] },
+      { slide: [0, 0, 1, 1], cam: [.68, .64, .29, .32, 6], name: [.04, .82, .42, .11] },
+      { cam: [0, 0, .45, 1], slide: [.47, .04, .51, .5, 6], cap: [.45, .55, .55, .45] }
     ];
-    var L = { cam: demo.querySelector('.obs-cam'), slide: demo.querySelector('.obs-slide'), cap: demo.querySelector('.obs-cap'), name: demo.querySelector('.obs-name') };
+    var LINES = ['Good morning, church.', 'Today we open John chapter 15.', '“I am the vine; you are the branches.”', 'Whoever remains in me will bear much fruit.', 'Apart from me you can do nothing.'];
+    var comps = demo.querySelectorAll('.obs-comp');
     var btns = Array.prototype.slice.call(demo.querySelectorAll('.obs-scenes button'));
-    var place = function (el, f) {
-      if (!f) { el.style.opacity = 0; return; }
-      el.style.opacity = 1;
+    var li = 0, cur = 0, front = 0, timer = null, capTimer = null;
+
+    var box = function (el, f) {
       el.style.left = f[0] * 100 + '%'; el.style.top = f[1] * 100 + '%';
       el.style.width = f[2] * 100 + '%'; el.style.height = f[3] * 100 + '%';
       el.style.borderRadius = (f[4] || 0) + 'px';
     };
-    var cur = 0, timer = null;
+    var layer = function (cls, f) {
+      var d = document.createElement('div'); d.className = 'obs-layer ' + cls; box(d, f); return d;
+    };
+    var render = function (comp, s) {
+      comp.innerHTML = '';
+      var SLIDE = '<b>요한복음 John 1:12</b>영접하는 자 곧 그 이름을 믿는 자들에게는 하나님의 자녀가 되는 권세를 주셨으니<span>Yet to all who received him, to those who believed in his name, he gave the right to become children of God</span>';
+      if (s.wide) { var w = layer('wide', s.wide); w.innerHTML = '<img src="' + IMG + 'mmcnyc_bg.jpg" alt="">'; comp.appendChild(w); }
+      if (s.slide && s.slide[2] === 1) { var sf = layer('slide', s.slide); sf.innerHTML = SLIDE; comp.appendChild(sf); }
+      if (s.cam) { var c = layer('cam', s.cam); c.innerHTML = '<img src="' + IMG + 'mmcnyc_bg.jpg" alt="">'; comp.appendChild(c); }
+      if (s.slide && s.slide[2] !== 1) { var sl = layer('slide' + (s.slide[2] < .4 ? ' sm' : ''), s.slide); sl.innerHTML = SLIDE; comp.appendChild(sl); }
+      if (s.cap) { var cp = layer('cap', s.cap); cp.innerHTML = '<div class="old"></div><div></div>'; comp.appendChild(cp); }
+      if (s.name) { var n = layer('name', s.name); n.textContent = 'Pastor · Sunday Service'; comp.appendChild(n); }
+      paint(comp);
+    };
+    var paint = function (comp) {
+      var cp = comp.querySelector('.cap'); if (!cp) return;
+      cp.children[0].textContent = LINES[li % LINES.length];
+      cp.children[1].textContent = LINES[(li + 1) % LINES.length];
+    };
     var show = function (i) {
-      cur = i % SCENES.length; var s = SCENES[cur];
-      place(L.cam, s.cam); place(L.slide, s.slide); place(L.cap, s.cap);
-      L.name.style.opacity = s.name ? 1 : 0;
+      cur = i % SCENES.length;
+      var next = comps[1 - front];
+      render(next, SCENES[cur]);
+      next.classList.add('on'); comps[front].classList.remove('on');
+      front = 1 - front;
       btns.forEach(function (b, j) { b.classList.toggle('on', j === cur); });
     };
-    btns.forEach(function (b, j) { b.addEventListener('click', function () { show(j); restart(); }); });
     var restart = function () {
       clearInterval(timer);
-      if (!reduce) timer = setInterval(function () { show(cur + 1); }, 3200);
+      if (!reduce) timer = setInterval(function () { show(cur + 1); }, 3400);
     };
-    show(0);
-    whenVisible(demo, function (vis) { if (vis) restart(); else clearInterval(timer); });
-
-    // Rolling captions inside the caption layer
-    // The caption layer shows the translation, so it stays in English on screen.
-    var lines = ['Good morning, church.', 'Today we open John chapter 15.', 'Jesus said, “I am the vine; you are the branches.”', 'Whoever remains in me will bear much fruit.'];
-    var li = 0, capEl = L.cap;
-    var roll = function () {
-      var a = lines[li % lines.length], b = lines[(li + 1) % lines.length];
-      capEl.innerHTML = '<div class="old"></div><div></div>';
-      capEl.children[0].textContent = a; capEl.children[1].textContent = b;
-      li++;
-    };
-    roll(); if (!reduce) setInterval(roll, 2600);
+    btns.forEach(function (b, j) { b.addEventListener('click', function () { show(j); restart(); }); });
+    render(comps[0], SCENES[0]); comps[0].classList.add('on');
+    btns[0] && btns[0].classList.add('on');
+    whenVisible(demo, function (vis) {
+      if (vis) { restart(); clearInterval(capTimer); if (!reduce) capTimer = setInterval(function () { li++; paint(comps[front]); }, 2400); }
+      else { clearInterval(timer); clearInterval(capTimer); }
+    });
   });
 
   // ---------- LEBAB: type a church name, the site appears ----------
