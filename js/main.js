@@ -192,3 +192,219 @@
 
 
 })();
+
+/* =====================================================================
+   2026-10 — Products menu, media base, logo motion, feature stage,
+   Church OBS scene demo, LEBAB typing demo
+   ===================================================================== */
+(function () {
+  var root = document.documentElement;
+  var reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  var lang = function () { return root.getAttribute('lang') === 'ko' ? 'ko' : 'en'; };
+  var onLang = function (fn) {
+    new MutationObserver(function (m) { m.forEach(function (r) { if (r.attributeName === 'lang') fn(); }); })
+      .observe(root, { attributes: true });
+  };
+
+  // ---------- Media location ----------
+  // Videos are referenced as data-media="wordalive/wa-venues-{lang}.mp4".
+  // Leave MEDIA_BASE empty to serve them from this repo's /media/ folder.
+  // Once the Cloudflare R2 bucket is public, set it to that address, e.g.
+  // 'https://media.wordalive.app/mmc/' — every page switches at once.
+  var MEDIA_BASE = '';
+  var script = document.querySelector('script[src$="js/main.js"]');
+  var siteRoot = script ? script.src.replace(/js\/main\.js.*$/, '') : '/';
+  var mediaUrl = function (p) { return (MEDIA_BASE || siteRoot + 'media/') + p.replace('{lang}', lang()); };
+  var setMedia = function (el) {
+    var p = el.getAttribute('data-media'); if (!p) return;
+    var url = mediaUrl(p);
+    if (el.tagName === 'VIDEO') { if (el.getAttribute('src') !== url) el.setAttribute('src', url); }
+    else el.setAttribute('src', url);
+    var po = el.getAttribute('data-poster');
+    if (po) el.setAttribute('poster', mediaUrl(po));
+  };
+  document.querySelectorAll('[data-media]').forEach(setMedia);
+
+  // ---------- Current page in the nav (resolved paths, so ../ links match) ----------
+  var here = location.pathname.replace(/index\.html$/, '');
+  document.querySelectorAll('.nav a').forEach(function (a) {
+    var p = a.pathname.replace(/index\.html$/, '');
+    if (p.length > 1 && here.indexOf(p) === 0 && p !== siteRoot.replace(location.origin, '')) a.setAttribute('aria-current', 'page');
+    else if (a.getAttribute('aria-current')) a.removeAttribute('aria-current');
+  });
+  document.querySelectorAll('.nav-group').forEach(function (g) {
+    if (g.querySelector('a[aria-current]')) g.classList.add('current');
+  });
+
+  // ---------- Products dropdown (tap/keyboard; hover handled in CSS) ----------
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('.nav-trigger');
+    document.querySelectorAll('.nav-group.open').forEach(function (g) {
+      if (!t || g !== t.parentElement) { g.classList.remove('open'); g.querySelector('.nav-trigger').setAttribute('aria-expanded', 'false'); }
+    });
+    if (t) {
+      var g = t.parentElement, open = g.classList.toggle('open');
+      t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('.nav-group.open').forEach(function (g) { g.classList.remove('open'); });
+  });
+
+  var whenVisible = function (el, cb, threshold) {
+    if (!('IntersectionObserver' in window)) { cb(true); return; }
+    new IntersectionObserver(function (es) { es.forEach(function (x) { cb(x.isIntersecting); }); },
+      { threshold: threshold || 0.35 }).observe(el);
+  };
+
+  // ---------- Logo motion: play once in view, rest on the last frame ----------
+  document.querySelectorAll('.logo-stage').forEach(function (box) {
+    var v = box.querySelector('video'), btn = box.querySelector('.replay');
+    if (!v) return;
+    v.muted = true; v.playsInline = true;
+    if (reduce) { box.classList.add('done'); return; }   // poster = final logo frame
+    var played = false;
+    whenVisible(box, function (vis) {
+      if (vis && !played) { played = true; v.currentTime = 0; v.play().catch(function () { box.classList.add('done'); }); }
+    });
+    v.addEventListener('ended', function () { box.classList.add('done'); });
+    var replay = function () { box.classList.remove('done'); v.currentTime = 0; v.play().catch(function () {}); };
+    if (btn) btn.addEventListener('click', replay);
+  });
+
+  // ---------- Feature stage ----------
+  document.querySelectorAll('[data-stage]').forEach(function (stage) {
+    var items = Array.prototype.slice.call(stage.querySelectorAll('.stage-item'));
+    var screen = stage.querySelector('.stage-screen');
+    var v = screen.querySelector('video');
+    var pp = screen.querySelector('.playpause');
+    var cap = stage.querySelector('.stage-caption');
+    var idx = 0, visible = false, userPaused = reduce;
+    v.muted = true; v.playsInline = true; v.loop = false;
+
+    var load = function (i, autoplay) {
+      idx = (i + items.length) % items.length;
+      items.forEach(function (b, j) {
+        b.setAttribute('aria-selected', j === idx ? 'true' : 'false');
+        b.tabIndex = j === idx ? 0 : -1;
+        b.style.setProperty('--p', 0);
+      });
+      var it = items[idx];
+      if (cap) { var d = it.querySelector('.d .' + lang()); cap.textContent = d ? d.textContent : ''; }
+      v.classList.add('fading');
+      setTimeout(function () {
+        v.setAttribute('data-media', it.getAttribute('data-clip'));
+        v.setAttribute('data-poster', it.getAttribute('data-clip').replace('.mp4', '.jpg'));
+        setMedia(v);
+        v.load();
+        v.addEventListener('loadeddata', function once() {
+          v.removeEventListener('loadeddata', once);
+          v.classList.remove('fading');
+          if (autoplay && visible && !userPaused) v.play().catch(function () {});
+        });
+      }, 220);
+      if (window.innerWidth < 900) it.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    };
+    var sync = function () { screen.classList.toggle('paused', v.paused); };
+    v.addEventListener('play', sync); v.addEventListener('pause', sync);
+    v.addEventListener('timeupdate', function () {
+      if (v.duration) items[idx].style.setProperty('--p', (v.currentTime / v.duration).toFixed(3));
+    });
+    v.addEventListener('ended', function () { load(idx + 1, true); });
+
+    items.forEach(function (b, j) {
+      b.addEventListener('click', function () { userPaused = false; load(j, true); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); items[(j + 1) % items.length].focus(); items[(j + 1) % items.length].click(); }
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); var k = (j - 1 + items.length) % items.length; items[k].focus(); items[k].click(); }
+      });
+    });
+    var toggle = function () {
+      if (v.paused) { userPaused = false; v.play().catch(function () {}); } else { userPaused = true; v.pause(); }
+    };
+    pp.addEventListener('click', toggle);
+    v.addEventListener('click', toggle);
+
+    whenVisible(stage, function (vis) {
+      visible = vis;
+      if (vis && !userPaused) v.play().catch(function () {}); else if (!vis) v.pause();
+    }, 0.4);
+    onLang(function () { load(idx, !v.paused); });
+    load(0, false);
+    sync();
+  });
+
+  // ---------- Church OBS: scenes switching on the program monitor ----------
+  document.querySelectorAll('[data-obs-demo]').forEach(function (demo) {
+    // Layouts taken from a real Church OBS scene file (x, y, w, h as fractions).
+    var SCENES = [
+      { cam: [.55, 0, .45, 1, 14], slide: [.03, 0, .49, .65], cap: [0, .65, .55, .35], name: 0 },
+      { cam: [0, 0, 1, 1, 0], slide: [.65, .03, .33, .33], cap: [0, .73, 1, .27], name: 0 },
+      { cam: [0, 0, 1, 1, 0], slide: null, cap: [0, .69, 1, .31], name: 0 },
+      { cam: [.68, .66, .28, .28, 6], slide: [0, 0, 1, 1], cap: null, name: 1 },
+      { cam: [0, 0, .45, 1, 0], slide: [.45, 0, .55, .55], cap: [.45, .55, .55, .45], name: 0 }
+    ];
+    var L = { cam: demo.querySelector('.obs-cam'), slide: demo.querySelector('.obs-slide'), cap: demo.querySelector('.obs-cap'), name: demo.querySelector('.obs-name') };
+    var btns = Array.prototype.slice.call(demo.querySelectorAll('.obs-scenes button'));
+    var place = function (el, f) {
+      if (!f) { el.style.opacity = 0; return; }
+      el.style.opacity = 1;
+      el.style.left = f[0] * 100 + '%'; el.style.top = f[1] * 100 + '%';
+      el.style.width = f[2] * 100 + '%'; el.style.height = f[3] * 100 + '%';
+      el.style.borderRadius = (f[4] || 0) + 'px';
+    };
+    var cur = 0, timer = null;
+    var show = function (i) {
+      cur = i % SCENES.length; var s = SCENES[cur];
+      place(L.cam, s.cam); place(L.slide, s.slide); place(L.cap, s.cap);
+      L.name.style.opacity = s.name ? 1 : 0;
+      btns.forEach(function (b, j) { b.classList.toggle('on', j === cur); });
+    };
+    btns.forEach(function (b, j) { b.addEventListener('click', function () { show(j); restart(); }); });
+    var restart = function () {
+      clearInterval(timer);
+      if (!reduce) timer = setInterval(function () { show(cur + 1); }, 3200);
+    };
+    show(0);
+    whenVisible(demo, function (vis) { if (vis) restart(); else clearInterval(timer); });
+
+    // Rolling captions inside the caption layer
+    // The caption layer shows the translation, so it stays in English on screen.
+    var lines = ['Good morning, church.', 'Today we open John chapter 15.', 'Jesus said, “I am the vine; you are the branches.”', 'Whoever remains in me will bear much fruit.'];
+    var li = 0, capEl = L.cap;
+    var roll = function () {
+      var a = lines[li % lines.length], b = lines[(li + 1) % lines.length];
+      capEl.innerHTML = '<div class="old"></div><div></div>';
+      capEl.children[0].textContent = a; capEl.children[1].textContent = b;
+      li++;
+    };
+    roll(); if (!reduce) setInterval(roll, 2600);
+  });
+
+  // ---------- LEBAB: type a church name, the site appears ----------
+  document.querySelectorAll('[data-lebab-demo]').forEach(function (demo) {
+    var out = demo.querySelector('.lb-type'), go = demo.querySelector('.lb-go'), site = demo.querySelector('.lb-site');
+    var url = demo.querySelector('.url'), nm = demo.querySelector('.lb-site .banner b');
+    var NAMES = { ko: ['맨하탄선교교회', '은혜교회', '새생명교회'], en: ['Manhattan Mission Church', 'Grace Church', 'New Life Church'] };
+    var SLUG = ['mmc', 'grace', 'newlife'];
+    var n = 0, running = false;
+    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+    var cycle = function () {
+      var name = NAMES[lang()][n % 3], slug = SLUG[n % 3];
+      site.classList.remove('show'); out.textContent = ''; url.textContent = 'lebab.live';
+      var p = wait(700);
+      name.split('').forEach(function (ch) { p = p.then(function () { out.textContent += ch; return wait(lang() === 'ko' ? 140 : 70); }); });
+      return p.then(function () { return wait(500); })
+        .then(function () { go.classList.add('press'); return wait(180); })
+        .then(function () {
+          go.classList.remove('press'); nm.textContent = name; url.textContent = slug + '.lebab.live';
+          site.classList.add('show'); return wait(3600);
+        })
+        .then(function () { n++; });
+    };
+    var loop = function () { if (!running) return; cycle().then(loop); };
+    if (reduce) { nm.textContent = NAMES[lang()][0]; out.textContent = NAMES[lang()][0]; url.textContent = 'mmc.lebab.live'; site.classList.add('show'); return; }
+    whenVisible(demo, function (vis) { if (vis && !running) { running = true; loop(); } else if (!vis) running = false; });
+  });
+})();

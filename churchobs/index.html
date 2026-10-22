@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Church OBS — Simple church broadcasting | MMC NYC" data-ko="Church OBS — 교회용 간편 방송 | MMC NYC">Church OBS — Simple church broadcasting | MMC NYC</title>
+<meta name="description" content="Church OBS is simple YouTube broadcasting software for churches: prepare once, compose scenes, and go live with one click. Optional Wordalive captions and slides.">
+<link rel="icon" href="../img/mark.svg" type="image/svg+xml">
+<link rel="canonical" href="https://mmcnyc.org/churchobs/">
+<meta property="og:title" content="Church OBS — Simple church broadcasting | MMC NYC">
+<meta property="og:description" content="Church OBS is simple YouTube broadcasting software for churches: prepare once, compose scenes, and go live with one click. Optional Wordalive captions and slides.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mmcnyc.org/churchobs/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="p-obs">
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="../index.html">
+      <img class="mark" src="../img/mark.svg" alt="">
+      <span>MMC NYC <small>· Mission &amp; Media for Church</small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <div class="nav-group">
+        <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true"><span class="en">Products</span><span class="ko">제품</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="nav-menu">
+          <a href="../wordalive/"><span class="pm wa">Wa</span><b>Wordalive</b><small><span class="en">Live sermon translation</span><span class="ko">실시간 설교 번역</span></small></a>
+          <a href="../lebab/"><span class="pm lb">Lb</span><b>LEBAB</b><small><span class="en">Websites for every church</span><span class="ko">모든 교회에 홈페이지를</span></small></a>
+          <a href="../churchobs/"><span class="pm obs">TV</span><b>Church OBS</b><small><span class="en">Simple church broadcasting</span><span class="ko">교회용 간편 방송</span></small></a>
+          <a href="../biblekingdom/"><span class="pm bk">BK</span><b>Bible Kingdom</b><small><span class="en">Children's worship curriculum</span><span class="ko">어린이 예배 커리큘럼</span></small></a>
+        </div>
+      </div>
+      <a href="../vision/"><span class="en">Vision</span><span class="ko">비전</span></a>
+      <a href="../about/"><span class="en">About</span><span class="ko">소개</span></a>
+      <a href="../contact/"><span class="en">Contact</span><span class="ko">문의</span></a>
+    </nav>
+    <div style="display:flex;gap:10px;align-items:center">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="ko" aria-pressed="false">한국어</button>
+      </div>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+<main>
+<section class="obs-hero">
+  <div class="container hero-split">
+    <div>
+      <div class="eyebrow"><span class="en">In development · Mac first</span><span class="ko">개발 중 · Mac 먼저</span></div>
+      <h1 class="obs-word" style="color:#fff">Church OBS</h1>
+      <p class="en lede">Simple YouTube broadcasting for churches. Prepare once, build your scenes, and switch them like buttons during the service — no media team required.</p><p class="ko lede">교회를 위한 간편 유튜브 방송 소프트웨어. 한 번 준비하고, 장면을 만들어 두고, 예배 중엔 버튼처럼 바꾸기만 하세요. 미디어팀이 없어도 됩니다.</p>
+      <div class="btn-row" style="margin-top:28px">
+        <a class="btn accent" href="../contact/"><span class="en">Join the early-access list</span><span class="ko">얼리 액세스 신청</span> →</a>
+        <a class="btn secondary" href="#modes"><span class="en">Works with Wordalive</span><span class="ko">Wordalive와 함께</span></a>
+      </div>
+    </div>
+    <div class="obs-app" data-obs-demo aria-label="Church OBS demo: scenes switching on the program monitor">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="obs-word" style="color:#ddd;font-size:.9rem">Church OBS</span><span class="obs-live">LIVE</span></div>
+      <div class="obs-body">
+        <div class="obs-program">
+          <div class="obs-layer obs-cam"></div>
+          <div class="obs-layer obs-slide"><span>“I am the vine; you are the branches.”<em>John 15:5</em></span></div>
+          <div class="obs-layer obs-cap"></div>
+          <div class="obs-layer obs-name">Pastor · Sunday Service</div>
+        </div>
+        <div class="obs-scenes">
+          <div class="lab"><span class="en">Scenes</span><span class="ko">장면</span></div>
+          <button type="button"><span class="en">Slides + captions</span><span class="ko">슬라이드 + 자막</span></button>
+          <button type="button"><span class="en">Small slide</span><span class="ko">작은 슬라이드</span></button>
+          <button type="button"><span class="en">Captions only</span><span class="ko">자막만</span></button>
+          <button type="button"><span class="en">Scripture</span><span class="ko">말씀·자료</span></button>
+          <button type="button"><span class="en">Right slide</span><span class="ko">오른쪽 슬라이드</span></button>
+        </div>
+      </div>
+      <div class="obs-foot"><span>MIC</span><span class="obs-meter"><i></i></span><span>1080p · 30fps</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="en">How it works</span><span class="ko">작동 방식</span></div>
+      <h2><span class="en">Prepare. Compose. Go live.</span><span class="ko">준비하고, 구성하고, 송출하세요.</span></h2>
+      <p class="en">Church OBS keeps the power of OBS-style scenes, but hides everything a Sunday volunteer doesn't need.</p><p class="ko">OBS식 장면 구성의 힘은 그대로, 주일 봉사자에게 필요 없는 것은 모두 숨겼습니다.</p>
+    </div>
+    <div class="flow">
+      <div><h3><span class="en">Prepare</span><span class="ko">준비</span></h3><p class="en">Sign in, connect YouTube, and pick your camera and microphone. Your settings are saved to your account.</p><p class="ko">로그인하고 유튜브를 연결한 뒤 카메라와 마이크를 고르세요. 설정은 계정에 저장됩니다.</p></div>
+      <div><h3><span class="en">Compose scenes</span><span class="ko">장면 구성</span></h3><p class="en">Start from ready-made templates, or build scenes from sources — camera, window capture, browser, audio, text.</p><p class="ko">기본 템플릿에서 시작하거나, 카메라·창 캡처·브라우저·오디오·텍스트 소스로 직접 장면을 만드세요.</p></div>
+      <div><h3><span class="en">Go live</span><span class="ko">송출</span></h3><p class="en">During the service, switch scenes like buttons. Save the whole service as a scenario and reuse it next week.</p><p class="ko">예배 중엔 장면을 버튼처럼 바꾸세요. 예배 전체를 시나리오로 저장해 다음 주에 그대로 씁니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="modes">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="en">With Wordalive</span><span class="ko">Wordalive와 함께</span></div>
+      <h2><span class="en">Add translation only when you want it.</span><span class="ko">번역은 필요할 때만 더하세요.</span></h2>
+      <p class="en">Connecting Wordalive is optional. Link your account and Wordalive's studio — captions, slides, service order — appears inside Church OBS. Translation time is billed by Wordalive as usual.</p><p class="ko">Wordalive 연결은 선택입니다. 계정을 연결하면 Wordalive 스튜디오의 자막·슬라이드·예배 순서를 Church OBS 안에서 그대로 씁니다. 번역 시간은 평소처럼 Wordalive에서 차감됩니다.</p>
+    </div>
+    <div class="modes">
+      <div class="mode"><div class="lvl"><i class="on"></i><i></i><i></i></div><h3><span class="en">Not connected</span><span class="ko">연결 안 함</span></h3><p class="en">A clean broadcast app on its own — camera, slides window, and your own text.</p><p class="ko">단독 방송 앱으로 — 카메라, 슬라이드 창, 직접 입력한 문구.</p></div>
+      <div class="mode"><div class="lvl"><i class="on"></i><i class="on"></i><i></i></div><h3><span class="en">Translated captions</span><span class="ko">번역 자막만</span></h3><p class="en">Wordalive's live captions become a source you can place in any scene.</p><p class="ko">Wordalive 실시간 자막이 소스가 되어 어느 장면에나 배치됩니다.</p></div>
+      <div class="mode"><div class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></div><h3><span class="en">Captions + slides</span><span class="ko">자막 + 슬라이드</span></h3><p class="en">The full Wordalive studio: slides, service order and captions, laid out for broadcast.</p><p class="ko">Wordalive 스튜디오 전체 — 슬라이드·예배 순서·자막을 방송용 배치로.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="en">Planned pricing</span><span class="ko">예정 요금</span></div>
+      <h2><span class="en">Free to start. Pro when you grow.</span><span class="ko">무료로 시작, 필요하면 Pro.</span></h2>
+    </div>
+    <div class="price-grid" style="max-width:760px">
+      <div class="price"><h3>Free</h3><div class="amt">$0</div><ul>
+        <li><span class="en">1 saved scenario</span><span class="ko">저장 시나리오 1개</span></li><li><span class="en">1 camera</span><span class="ko">카메라 1대</span></li><li><span class="en">Church OBS watermark</span><span class="ko">Church OBS 워터마크</span></li></ul></div>
+      <div class="price featured"><h3>Pro</h3><div class="amt">$9.99<small> / <span class="en">month</span><span class="ko">월</span></small></div><small class="muted"><span class="en">or $79.99 / year · 2-week free trial</span><span class="ko">또는 연 $79.99 · 첫 2주 무료 체험</span></small><ul>
+        <li><span class="en">Unlimited scenarios, saved to the cloud</span><span class="ko">시나리오 무제한 · 클라우드 저장</span></li><li><span class="en">Multiple cameras</span><span class="ko">여러 대의 카메라</span></li><li><span class="en">No watermark · face retouch</span><span class="ko">워터마크 없음 · 얼굴 보정</span></li></ul></div>
+    </div>
+    <p class="note"><span class="en">Church OBS is still in development; plans and prices may change before launch.</span><span class="ko">Church OBS는 개발 중이며, 출시 전 요금과 구성은 바뀔 수 있습니다.</span></p>
+  </div>
+</section>
+<section>
+  <div class="container">
+    <div class="cta">
+      <div>
+        <h2><span class="en">Want to try it on a Sunday?</span><span class="ko">주일 예배에서 먼저 써 보시겠어요?</span></h2>
+        <p class="en">We're inviting a small group of churches to test Church OBS before launch.</p><p class="ko">출시 전, 소수의 교회와 함께 Church OBS를 시험하고 있습니다.</p>
+      </div>
+      <a class="btn" href="../contact/"><span class="en">Contact us</span><span class="ko">문의하기</span> →</a>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div>
+      <a class="brand" href="../index.html" style="margin-bottom:12px"><img class="mark" src="../img/mark.svg" alt=""><span>MMC NYC</span></a>
+      <p class="en">Mission &amp; Media for Church. Digital tools built by a church, for churches — starting with real-time sermon translation.</p><p class="ko">Mission &amp; Media for Church. 교회가 교회를 위해 만드는 디지털 도구 — 실시간 설교 번역에서 시작합니다.</p>
+      <p class="small">New York, NY</p>
+    </div>
+    <div>
+      <h4><span class="en">Products</span><span class="ko">제품</span></h4>
+      <ul>
+        <li><a href="../wordalive/">Wordalive</a></li>
+        <li><a href="../lebab/">LEBAB</a></li>
+        <li><a href="../churchobs/">Church OBS</a></li>
+        <li><a href="../biblekingdom/">Bible Kingdom</a></li>
+        <li><a href="../vision/"><span class="en">Roadmap</span><span class="ko">로드맵</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h4><span class="en">Organization</span><span class="ko">조직</span></h4>
+      <ul>
+        <li><a href="../about/"><span class="en">About MMC</span><span class="ko">MMC 소개</span></a></li>
+        <li><a href="../contact/"><span class="en">Contact</span><span class="ko">문의</span></a></li>
+        <li><a href="mailto:hello@mmcnyc.org">hello@mmcnyc.org</a></li>
+      </ul>
+    </div>
+    <div class="legal">
+      <span>© <span data-year></span> Mission &amp; Media for Church (MMC NYC). <span class="en">A nonprofit ministry.</span><span class="ko">비영리 사역 기관입니다.</span></span>
+      <span>Manhattan, New York</span>
+    </div>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

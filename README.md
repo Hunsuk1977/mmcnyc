@@ -33,7 +33,10 @@ header toggle sets and remembers. A `?lang=ko` link opens a page in Korean direc
 
 ```
 index.html            Home
-wordalive/            Wordalive product page
+wordalive/            Wordalive product page (logo-motion hero + feature stage)
+lebab/                LEBAB product page
+churchobs/            Church OBS product page
+biblekingdom/         Bible Kingdom product page
 vision/               Vision & roadmap
 about/                About MMC NYC
 contact/              Contact
@@ -42,6 +45,8 @@ contact/thanks/       Unused today — the success page for Netlify Forms (see b
 css/style.css         All styles
 js/main.js            EN/KO toggle, mobile menu, nav highlight, contact form
 img/mark.svg          Logo mark / favicon
+img/bk/               Bible Kingdom artwork
+media/                Product videos (see "Media" below)
 .nojekyll             Required for GitHub Pages
 netlify.toml          Headers + redirects, for when Netlify resumes
 ```
@@ -76,3 +81,24 @@ free certificate. Serve from one host at a time.
 
 CSS variables at the top of `css/style.css` (`--accent`, `--bg`, `--ink`, …).
 Fonts: Inter + Newsreader for Latin, Noto Sans KR + Noto Serif KR for Korean.
+
+## Products menu
+
+The header's **Products ▾** menu and the footer's product list are the same on
+every page. To add a product, copy one `<a>` inside `.nav-menu` (and one `<li>` in the
+footer) on each page.
+
+## Media (videos)
+
+Videos are not linked directly. They are written as
+`data-media="wordalive/wa-venues-{lang}.mp4"` and `js/main.js` fills in the address,
+swapping `{lang}` for `en` or `ko` to match the language toggle.
+
+- `MEDIA_BASE` at the top of the second block in `js/main.js` decides where they come from.
+  Empty (`''`) = this repo's `media/` folder. Set it to the R2 public address (for example
+  `'https://media.wordalive.app/'`) and every page switches at once.
+- The Cloudflare R2 bucket is **mmc-media**. Upload the contents of `media/` into it
+  keeping the same folder names (`wordalive/wa-venues-en.mp4`, …).
+- Feature-stage clips are 15–28 s, 1280×720, H.264, no audio. Each has a `.jpg` poster
+  with the same name.
+
