@@ -13,8 +13,56 @@
 <meta property="og:url" content="https://mmcnyc.org/lebab/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Noto+Sans+KR:wght@400;500;600;700;900&family=Outfit:wght@500;700;800&family=Noto+Serif+KR:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
+<style>
+/* LEBAB brand board (from the lebab repo's BRAND.md) — scoped to this section */
+.lb-brand{--lb-red:#E0432F;--lb-ink:#15192B;--lb-stone:#F4F3EF;--lb-muted:#7A7E8C;margin-top:56px;text-align:left}
+.lb-turn{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;max-width:640px;margin:0 auto 48px}
+.lb-turn figure{margin:0;text-align:center}
+.lb-turn svg{width:120px;height:120px;display:block;margin:0 auto 12px}
+.lb-babel{color:#b9b5aa;transform:scaleY(-1)}
+.lb-heart{color:var(--lb-red)}
+.lb-turn figcaption{font-size:.9rem;color:var(--ink-2);line-height:1.5}
+.lb-turn figcaption b{display:block;color:var(--ink);font-size:1rem}
+.lb-arrow{font-size:1.6rem;color:var(--ink-3)}
+.lb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.lb-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.lb-card h3{font:600 .78rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:0 0 18px}
+.lb-lockup{display:flex;align-items:center;gap:.4em;font-size:44px;line-height:1;color:var(--lb-ink)}
+.lb-lockup svg{width:1em;height:1em;color:var(--lb-red);flex:none}
+.lb-wm{font-family:'Outfit',sans-serif;font-weight:800;letter-spacing:-.04em}
+.lb-wm-ko{font-family:'Noto Sans KR',sans-serif;font-weight:900;letter-spacing:-.05em;font-size:.92em}
+.lb-lockups{display:flex;flex-direction:column;gap:18px}
+.lb-dark{background:var(--lb-ink);border-radius:12px;padding:16px 18px}
+.lb-dark .lb-lockup{color:#fff;font-size:30px}
+.lb-sizes{display:flex;align-items:flex-end;gap:18px;margin-top:4px;color:var(--lb-red)}
+.lb-sizes svg{display:block}
+.lb-swatches{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.lb-sw{border-radius:10px;border:1px solid var(--line);overflow:hidden;font-size:.74rem;line-height:1.35}
+.lb-sw i{display:block;height:58px}
+.lb-sw span{display:block;padding:7px 8px;color:var(--ink-2)}
+.lb-sw b{display:block;color:var(--ink);font-weight:600}
+.lb-type p{margin:0 0 14px}
+.lb-type small{display:block;font:500 .74rem/1.3 var(--sans);color:var(--ink-3);margin-bottom:4px;letter-spacing:.02em}
+.lb-t1{font-family:'Outfit',sans-serif;font-weight:800;font-size:2.1rem;letter-spacing:-.04em;line-height:1;color:var(--lb-ink)}
+.lb-t2{font-family:'Noto Sans KR',sans-serif;font-weight:900;font-size:1.45rem;letter-spacing:-.04em;line-height:1.3;color:var(--lb-ink);word-break:keep-all}
+.lb-t3{font-family:'Noto Sans KR',sans-serif;font-weight:400;font-size:1rem;color:var(--ink-2);word-break:keep-all}
+.lb-use{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.lb-btn{display:inline-flex;align-items:center;height:42px;padding:0 20px;border-radius:999px;background:var(--lb-red);color:#fff;font:700 .95rem 'Noto Sans KR',sans-serif}
+.lb-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;border:1px solid #E6E6E9;color:var(--lb-ink);background:#fff;font:700 12px 'Outfit',sans-serif}
+.lb-badge svg{width:14px;height:14px;color:var(--lb-red)}
+.lb-app{width:56px;height:56px;border-radius:14px;background:var(--lb-red);display:grid;place-items:center;color:#fff}
+.lb-app svg{width:34px;height:34px}
+.lb-tagline{margin-top:28px;text-align:center;font-family:'Noto Sans KR',sans-serif;font-weight:900;font-size:1.35rem;letter-spacing:-.03em;color:var(--lb-ink);word-break:keep-all}
+.lb-tagline small{display:block;font:500 .95rem var(--sans);color:var(--ink-3);letter-spacing:0;margin-top:4px}
+@media (max-width:760px){
+  .lb-grid{grid-template-columns:1fr}
+  .lb-swatches{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .lb-turn svg{width:84px;height:84px}
+  .lb-lockup{font-size:36px}
+}
+</style>
 </head>
 <body class="p-lebab">
 <header class="site-header">
@@ -115,10 +163,70 @@
 </section>
 
 <section class="section-alt">
-  <div class="container narrow" style="text-align:center">
+  <div class="container" style="text-align:center;max-width:920px">
     <div class="eyebrow"><span class="en">Why “LEBAB”</span><span class="ko">왜 “LEBAB”인가</span></div>
     <h2><span class="en">Babel, turned upside down.</span><span class="ko">바벨을 거꾸로.</span></h2>
     <p class="en muted">Babel was people joining forces to climb up and make a name for themselves. LEBAB — Hebrew for “heart” — turns it over: churches joining hands to serve from the lowest place, like Jesus.</p><p class="ko muted">바벨은 스스로 높아져 이름을 내려고 힘을 모은 사람들의 이야기였습니다. 히브리어로 ‘마음’을 뜻하는 LEBAB은 그것을 뒤집습니다 — 예수님처럼 가장 낮은 곳에서 섬기려고 손을 잡는 교회들.</p>
+
+    <div class="lb-brand">
+      <div class="lb-turn">
+        <figure>
+          <svg class="lb-babel" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <figcaption><b><span class="en">Babel</span><span class="ko">바벨</span></b><span class="en">Wide at the bottom, climbing up to make a name</span><span class="ko">아래가 넓고 위로 올라가 이름을 내려던 탑</span></figcaption>
+        </figure>
+        <div class="lb-arrow" aria-hidden="true">→</div>
+        <figure>
+          <svg class="lb-heart" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <figcaption><b>LEBAB · לֵבָב</b><span class="en">Turned over: descending to one point, a heart</span><span class="ko">뒤집으면: 한 점까지 내려가는 길, 그리고 마음</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="lb-grid">
+        <div class="lb-card">
+          <h3><span class="en">Logo</span><span class="ko">로고</span></h3>
+          <div class="lb-lockups">
+            <div class="lb-lockup"><svg class="" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lb-wm">lebab</span></div>
+            <div class="lb-lockup"><svg class="" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lb-wm-ko">레바브</span></div>
+            <div class="lb-dark"><div class="lb-lockup"><svg class="" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lb-wm">lebab</span></div></div>
+            <div class="lb-sizes" aria-label="sizes">
+              <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 64 64" width="32" height="32" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 64 64" width="16" height="16" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <p class="muted" style="font-size:.88rem;margin:16px 0 0"><span class="en">One continuous ribbon winding down four tiers to a single point; the split top makes the heart. Always upright, always lowercase.</span><span class="ko">한 줄의 리본이 네 층을 굽이쳐 한 점까지 내려옵니다. 갈라진 윗부분이 하트를 만듭니다. 마크는 돌리지 않고, 워드마크는 항상 소문자입니다.</span></p>
+        </div>
+
+        <div class="lb-card">
+          <h3><span class="en">Color</span><span class="ko">색</span></h3>
+          <div class="lb-swatches">
+            <div class="lb-sw"><i style="background:#E0432F"></i><span><b>Red</b>#E0432F</span></div>
+            <div class="lb-sw"><i style="background:#15192B"></i><span><b>Ink</b>#15192B</span></div>
+            <div class="lb-sw"><i style="background:#F4F3EF"></i><span><b>Stone</b>#F4F3EF</span></div>
+            <div class="lb-sw"><i style="background:#FFFFFF"></i><span><b>Paper</b>#FFFFFF</span></div>
+            <div class="lb-sw"><i style="background:#7A7E8C"></i><span><b>Muted</b>#7A7E8C</span></div>
+          </div>
+          <p class="muted" style="font-size:.88rem;margin:16px 0 22px"><span class="en">One accent only. Each church's site keeps its own colors; LEBAB stays quiet.</span><span class="ko">강조색은 빨강 하나뿐입니다. 교회 사이트는 교회의 색을 쓰고, LEBAB은 조용히 뒤에 있습니다.</span></p>
+          <h3><span class="en">In use</span><span class="ko">쓰임</span></h3>
+          <div class="lb-use">
+            <span class="lb-btn"><span class="en">Start free</span><span class="ko">무료로 시작하기</span></span>
+            <span class="lb-badge"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>Made with lebab</span>
+            <span class="lb-app"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12 H25" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M39 12 H54 L13 27 H51 L20 42 H44 L28 56 H36" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </div>
+
+        <div class="lb-card" style="grid-column:1/-1">
+          <h3><span class="en">Type</span><span class="ko">글꼴</span></h3>
+          <div class="lb-type">
+            <p><small>Outfit 800 · −0.04em · <span class="en">English wordmark and headings</span><span class="ko">영문 워드마크·제목</span></small><span class="lb-t1">lebab — a home for every church</span></p>
+            <p><small>Noto Sans KR 900 · −0.05em · <span class="en">Korean wordmark and headings</span><span class="ko">한글 워드마크·제목</span></small><span class="lb-t2">홈페이지 없는 교회가 없을 때까지</span></p>
+            <p style="margin:0"><small>Noto Sans KR 400 · <span class="en">Korean body text</span><span class="ko">한글 본문</span></small><span class="lb-t3">검색하면 나오는 교회. 오늘 만들고, 폰에서 고치세요.</span></p>
+          </div>
+        </div>
+      </div>
+
+      <p class="lb-tagline">홈페이지 없는 교회가 없을 때까지<small>Until no church is without a home online.</small></p>
+    </div>
   </div>
 </section>
 <section>
