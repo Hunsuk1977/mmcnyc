@@ -3,17 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title data-en="Church OBS — Simple church broadcasting | MMC NYC" data-ko="Church OBS — 교회용 간편 방송 | MMC NYC">Church OBS — Simple church broadcasting | MMC NYC</title>
-<meta name="description" content="Church OBS is simple YouTube broadcasting software for churches: prepare once, compose scenes, and go live with one click. Optional Wordalive captions and slides.">
+<title data-en="Church OBS — Simple YouTube broadcasting for churches | MMC NYC" data-ko="Church OBS — 교회를 위한 간편 YouTube 방송 | MMC NYC">Church OBS — Simple YouTube broadcasting for churches | MMC NYC</title>
+<meta name="description" content="Church OBS is simple YouTube broadcasting software for churches, built on the OBS engine: prepare, compose scenes, and go live with one key. Free with a watermark; Pro adds retouch, multiple cameras and unlimited scenarios.">
 <link rel="icon" href="../img/mark.svg" type="image/svg+xml">
 <link rel="canonical" href="https://mmcnyc.org/churchobs/">
-<meta property="og:title" content="Church OBS — Simple church broadcasting | MMC NYC">
-<meta property="og:description" content="Church OBS is simple YouTube broadcasting software for churches: prepare once, compose scenes, and go live with one click. Optional Wordalive captions and slides.">
+<meta property="og:title" content="Church OBS — Simple YouTube broadcasting for churches | MMC NYC">
+<meta property="og:description" content="Church OBS is simple YouTube broadcasting software for churches, built on the OBS engine: prepare, compose scenes, and go live with one key.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mmcnyc.org/churchobs/">
+<meta property="og:image" content="https://churchobs.app/assets/app-run.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="p-obs">
@@ -46,92 +48,160 @@
     </div>
   </div>
 </header>
-<main>
+<main class="obs-main">
 <section class="obs-hero">
-  <div class="container hero-split">
+  <div class="container">
+    <div class="obs-brand"><img src="https://churchobs.app/assets/Church-OBS-Logo-OnDark.svg" alt="Church OBS" width="1310" height="338"></div>
+    <div class="eyebrow"><span class="en">Simple YouTube broadcasting software for churches</span><span class="ko">교회를 위한 간편 YouTube 방송 소프트웨어</span></div>
+    <h1><span class="en">No complicated setup.<br>Professional worship broadcasts.</span><span class="ko">복잡한 설정 없이,<br>전문가 수준의 예배 방송을 완성하세요.</span></h1>
+    <p class="en lede">From connecting the camera to picking a scene and going live, a few clicks is all it takes. Built on the OBS engine with a church-ready setup already in place, so a volunteer on their first Sunday can broadcast without training.</p><p class="ko lede">카메라 연결부터 장면 선택, 방송 시작까지 단 몇 번의 클릭으로 충분합니다. 강력한 OBS 엔진 기반에 교회 맞춤형 환경을 미리 구축하여, 오늘 처음 온 봉사자도 교육 없이 바로 방송할 수 있습니다.</p>
+    <div class="btn-row">
+      <a class="btn obs-primary" href="https://churchobs.app/" target="_blank" rel="noopener"><span class="en">Start free at churchobs.app</span><span class="ko">churchobs.app에서 무료로 시작</span> →</a>
+      <a class="btn secondary" href="#how"><span class="en">See how it works</span><span class="ko">기능 보기</span></a>
+    </div>
+    <p class="obs-note"><span class="en">The free version only adds a watermark · Mac (macOS 14+) for now, other platforms on the way · Source code is public</span><span class="ko">무료 버전은 워터마크만 붙고 기능 제한은 없습니다 · 지금은 Mac(macOS 14 이상)용, 다른 플랫폼은 준비 중 · 소스 코드 공개</span></p>
+    <figure class="obs-shot">
+      <img src="https://churchobs.app/assets/app-run.jpg" alt="Church OBS run screen: green preview and red program monitors, scene buttons below" width="2200" height="1520" loading="eager" decoding="async">
+      <figcaption><span class="en">The actual Run screen — green is preview, red is what's on air. One tap puts a scene in preview; Space sends it out.</span><span class="ko">실제 진행 화면 — 초록은 미리보기, 빨강은 지금 나가는 화면. 장면을 한 번 누르면 미리보기에 올라가고, Space로 송출합니다.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="how">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="en">The flow</span><span class="ko">앱의 흐름</span></div>
+      <h2><span class="en">Three steps. That's the whole process.</span><span class="ko">단 3단계의 직관적 프로세스</span></h2>
+    </div>
+    <div class="obs-steps">
+      <div class="obs-step"><span class="n">1</span><h3><span class="en">Prepare</span><span class="ko">준비</span></h3><p class="en">Check and connect your camera, microphone and YouTube account in a few clicks. Check, check, check — that's all the preparation there is.</p><p class="ko">카메라, 마이크, 유튜브 계정을 몇 번의 클릭으로 점검하고 연결합니다. 체크, 체크, 체크. 준비는 그게 다입니다.</p></div>
+      <div class="obs-step"><span class="n">2</span><h3><span class="en">Scenes</span><span class="ko">장면</span></h3><p class="en">Lay out your screens with church-specific templates: Worship, Sermon, Scripture and more. Drag, resize, rotate — that becomes the broadcast picture.</p><p class="ko">찬양, 설교, 말씀 등 교회 전용 템플릿으로 간편하게 화면을 배치합니다. 끌고, 늘리고, 돌리면 그게 방송 화면이 됩니다.</p></div>
+      <div class="obs-step"><span class="n">3</span><h3><span class="en">Run</span><span class="ko">진행</span></h3><p class="en">Preview (green) and program (red) are kept apart so nothing goes out by mistake. Switch with the Space key.</p><p class="ko">대기(초록색)와 송출(빨간색) 화면을 구분해 실수 없이 방송합니다. Space 키로 간편하게 전환합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="obs-alt" id="features">
+  <div class="container split">
     <div>
-      <div class="eyebrow"><span class="en">In development · Mac first</span><span class="ko">개발 중 · Mac 먼저</span></div>
-      <h1 class="obs-word" style="color:#fff">Church OBS</h1>
-      <p class="en lede">Simple YouTube broadcasting for churches. Prepare once, build your scenes, and switch them like buttons during the service — no media team required.</p><p class="ko lede">교회를 위한 간편 유튜브 방송 소프트웨어. 한 번 준비하고, 장면을 만들어 두고, 예배 중엔 버튼처럼 바꾸기만 하세요. 미디어팀이 없어도 됩니다.</p>
-      <div class="btn-row" style="margin-top:28px">
-        <a class="btn accent" href="../contact/"><span class="en">Join the early-access list</span><span class="ko">얼리 액세스 신청</span> →</a>
-        <a class="btn secondary" href="#modes"><span class="en">Works with Wordalive</span><span class="ko">Wordalive와 함께</span></a>
+      <div class="eyebrow"><span class="en">No on-air mistakes</span><span class="ko">방송 중 실수 막기</span></div>
+      <h2><span class="en">You always see which screen is on air.</span><span class="ko">어느 화면이 나가는지 한눈에 보입니다</span></h2>
+      <ul class="obs-list">
+        <li><span class="en">Preview and program sit side by side. Resize them, then snap back to half-and-half with one button.</span><span class="ko">미리보기와 송출 화면을 나란히 놓고 봅니다. 크기를 바꿨다가도 버튼 하나로 반반으로 돌아옵니다.</span></li>
+        <li><span class="en">Tap a scene once to load it in preview, twice to send it out. Space works too.</span><span class="ko">장면을 한 번 누르면 미리보기에 올라가고, 두 번 누르면 바로 나갑니다. Space로도 넘깁니다.</span></li>
+        <li><span class="en">While streaming or recording, scenes are locked so they can't be edited or deleted.</span><span class="ko">방송이나 녹화가 돌아가는 동안에는 장면을 고치거나 지울 수 없게 잠깁니다.</span></li>
+        <li><span class="en">Show a countdown before the service, do a test recording to check audio, and confirm YouTube is connected.</span><span class="ko">예배 전 카운트다운을 띄우고, 테스트 녹화로 소리를 확인하고, YouTube가 연결됐는지 봅니다.</span></li>
+      </ul>
+      <div class="obs-templates">
+        <small><span class="en">Six scene templates</span><span class="ko">장면 템플릿 여섯 가지</span></small>
+        <span class="en"><i>Blank</i><i>Standby</i><i>Worship</i><i>Sermon</i><i>Scripture · Media</i><i>Closing</i></span><span class="ko"><i>빈 장면</i><i>대기 화면</i><i>찬양</i><i>설교</i><i>말씀·자료</i><i>종료</i></span>
       </div>
     </div>
-    <div class="obs-app" data-obs-demo aria-label="Church OBS demo: scenes switching on the program monitor">
-      <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="obs-word" style="color:#ddd;font-size:.9rem">Church OBS</span><span class="obs-live">LIVE</span></div>
-      <div class="obs-body">
-        <div class="obs-program">
-          <div class="obs-comp on"></div>
-          <div class="obs-comp"></div>
-        </div>
-        <div class="obs-scenes">
-          <div class="lab"><span class="en">Scenes</span><span class="ko">장면</span></div>
-          <button type="button"><span class="en">Slides + captions</span><span class="ko">슬라이드 + 자막</span></button>
-          <button type="button"><span class="en">Small slide</span><span class="ko">작은 슬라이드</span></button>
-          <button type="button"><span class="en">Captions only</span><span class="ko">자막만</span></button>
-          <button type="button"><span class="en">Scripture</span><span class="ko">말씀·자료</span></button>
-          <button type="button"><span class="en">Right slide</span><span class="ko">오른쪽 슬라이드</span></button>
-        </div>
-      </div>
-      <div class="obs-foot"><span>MIC</span><span class="obs-meter"><i></i></span><span>1080p · 30fps</span></div>
+    <figure class="obs-frame"><img src="https://churchobs.app/assets/pastor-wide.jpg" alt="" width="1448" height="814" loading="lazy" decoding="async"><span class="obs-tag live">LIVE</span></figure>
+  </div>
+</section>
+
+<section id="retouch">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="en">Smoother picture · Pro</span><span class="ko">화면을 매끄럽게 · PRO</span></div>
+      <h2><span class="en">Natural retouch, no stage makeup needed.</span><span class="ko">방송인처럼 화장하지 않아도, 자연스러운 보정</span></h2>
+      <p class="en">A clean, bright look without heavy makeup or lighting rigs. Skin-tone cleanup and background blur that work even in a dim sanctuary — and every frame is processed on your own computer. Video never goes to a server.</p><p class="ko">과도한 화장이나 번거로운 조명 세팅 없이도 깔끔하고 밝은 인상을 연출합니다. 어두운 예배당에서도 인물 중심의 피부톤 정돈과 배경 흐림 효과를 지원하며, 모든 영상 처리는 내 컴퓨터 안에서 실행되어 안전합니다.</p>
+    </div>
+    <div class="obs-compare">
+      <figure><img src="https://churchobs.app/assets/portrait-before.jpg" alt="Original face before retouch" width="666" height="684" loading="lazy" decoding="async"><figcaption><span class="en">Before</span><span class="ko">보정 전</span></figcaption></figure>
+      <figure><img src="https://churchobs.app/assets/portrait-after.jpg" alt="The same face with Pro natural retouch" width="666" height="684" loading="lazy" decoding="async"><figcaption><span class="en">Pro natural retouch</span><span class="ko">Pro 자연 보정</span></figcaption></figure>
+      <figure class="wide"><img src="https://churchobs.app/assets/retouch-panel.jpg" alt="The app's retouch, color tone and background settings panel" width="1349" height="364" loading="lazy" decoding="async"><figcaption><span class="en">The actual panel: choose Natural or A little more, then adjust strength per area.</span><span class="ko">앱 화면입니다. 자연스럽게와 조금 더 중에서 고르고, 부위별로 강도를 조절합니다.</span></figcaption></figure>
+    </div>
+    <div class="obs-grid4">
+      <div><h3><span class="en">Natural retouch</span><span class="ko">자연 보정</span></h3><p class="en">Finds the face and lightly refines skin, face shape, eyes and brows. Compare with the original instantly.</p><p class="ko">얼굴을 찾아서 피부결, 얼굴형, 눈매, 눈썹을 조금씩만 다듬습니다. 원본과 바로 비교할 수 있습니다.</p></div>
+      <div><h3><span class="en">Four color tones</span><span class="ko">색 톤 4종</span></h3><p class="en">Warm, Clear, Calm, Film. Adjust the strength to match your sanctuary lighting.</p><p class="ko">따뜻하게, 맑게, 차분하게, 필름. 예배당 조명에 맞춰 강도를 조절합니다.</p></div>
+      <div><h3><span class="en">Background blur</span><span class="ko">배경 흐림</span></h3><p class="en">Keeps the person sharp and blurs only the wall and equipment behind.</p><p class="ko">사람은 또렷하게 두고, 뒤에 있는 벽과 장비만 흐립니다.</p></div>
+      <div><h3><span class="en">Per camera</span><span class="ko">카메라마다 따로</span></h3><p class="en">Warm up the pulpit camera and leave the wide camera untouched.</p><p class="ko">강단 카메라는 따뜻하게 하고, 전체 카메라는 원본으로 둘 수 있습니다.</p></div>
     </div>
   </div>
 </section>
 
-<section>
+<section class="obs-alt" id="outputs">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow"><span class="en">How it works</span><span class="ko">작동 방식</span></div>
-      <h2><span class="en">Prepare. Compose. Go live.</span><span class="ko">준비하고, 구성하고, 송출하세요.</span></h2>
-      <p class="en">Church OBS keeps the power of OBS-style scenes, but hides everything a Sunday volunteer doesn't need.</p><p class="ko">OBS식 장면 구성의 힘은 그대로, 주일 봉사자에게 필요 없는 것은 모두 숨겼습니다.</p>
+      <div class="eyebrow"><span class="en">Anywhere</span><span class="ko">어디서나</span></div>
+      <h2><span class="en">Simulcast, and a safe copy.</span><span class="ko">동시 송출과 안정성</span></h2>
+      <p class="en">High-quality live streaming, plus a local recording that survives a shaky connection. The virtual camera sends the same picture into Zoom or Google Meet services.</p><p class="ko">고화질 실시간 방송은 물론, 인터넷 연결이 불안정해도 로컬 녹화로 안전하게 남깁니다. 가상 카메라 기능으로 Zoom이나 Google Meet 화상 예배에도 동일한 품질의 화면을 전달합니다.</p>
     </div>
-    <div class="flow">
-      <div><h3><span class="en">Prepare</span><span class="ko">준비</span></h3><p class="en">Sign in, connect YouTube, and pick your camera and microphone. Your settings are saved to your account.</p><p class="ko">로그인하고 유튜브를 연결한 뒤 카메라와 마이크를 고르세요. 설정은 계정에 저장됩니다.</p></div>
-      <div><h3><span class="en">Compose scenes</span><span class="ko">장면 구성</span></h3><p class="en">Start from ready-made templates, or build scenes from sources — camera, window capture, browser, audio, text.</p><p class="ko">기본 템플릿에서 시작하거나, 카메라·창 캡처·브라우저·오디오·텍스트 소스로 직접 장면을 만드세요.</p></div>
-      <div><h3><span class="en">Go live</span><span class="ko">송출</span></h3><p class="en">During the service, switch scenes like buttons. Save the whole service as a scenario and reuse it next week.</p><p class="ko">예배 중엔 장면을 버튼처럼 바꾸세요. 예배 전체를 시나리오로 저장해 다음 주에 그대로 씁니다.</p></div>
+    <div class="obs-outs">
+      <div><span class="obs-tag live">LIVE</span><h3><span class="en">YouTube Live</span><span class="ko">YouTube 라이브</span></h3><p class="en">Connect your channel once and go live with the broadcast button. Choose 720p or 1080p; the Mac hardware encoder keeps the computer from stuttering.</p><p class="ko">채널을 연결해 두면 방송 시작 버튼으로 바로 나갑니다. 720p와 1080p 중에 고르고, Mac의 하드웨어 인코더로 내보내 컴퓨터가 버벅이지 않습니다.</p></div>
+      <div><span class="obs-tag rec">REC</span><h3><span class="en">Local recording</span><span class="ko">로컬 녹화</span></h3><p class="en">On a slow-internet day the recording still lands on your computer. Try a test recording before the service.</p><p class="ko">인터넷이 느린 날에도 녹화는 컴퓨터에 그대로 남습니다. 예배 전에 테스트 녹화로 미리 확인해 보세요.</p></div>
+      <div><span class="obs-tag cam">CAM</span><h3><span class="en">Virtual camera</span><span class="ko">가상 카메라</span></h3><p class="en">The program output becomes a camera for Zoom · Google Meet, so online worship sees the same picture.</p><p class="ko">송출 화면이 가상 카메라로 나가서 Zoom · Google Meet 화상 예배에도 같은 화면을 보여 줍니다.</p><figure class="obs-frame sm"><img src="https://churchobs.app/assets/meeting.jpg" alt="Church OBS output shown as a camera in a video meeting" width="1672" height="941" loading="lazy" decoding="async"></figure></div>
     </div>
   </div>
 </section>
 
-<section class="section-alt" id="modes">
+<section id="wordalive">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow"><span class="en">With Wordalive</span><span class="ko">Wordalive와 함께</span></div>
-      <h2><span class="en">Add translation only when you want it.</span><span class="ko">번역은 필요할 때만 더하세요.</span></h2>
-      <p class="en">Connecting Wordalive is optional. Link your account and Wordalive's studio — captions, slides, service order — appears inside Church OBS. Translation time is billed by Wordalive as usual.</p><p class="ko">Wordalive 연결은 선택입니다. 계정을 연결하면 Wordalive 스튜디오의 자막·슬라이드·예배 순서를 Church OBS 안에서 그대로 씁니다. 번역 시간은 평소처럼 Wordalive에서 차감됩니다.</p>
+      <div class="eyebrow"><span class="en">WORDaLIVE integration</span><span class="ko">WORDaLIVE 연동</span></div>
+      <h2><span class="en">Simple, reliable integration with WORDaLIVE, our proven sermon-translation app.</span><span class="ko">검증된 설교 전문 번역앱 WORDaLIVE와 간편하고 안정적인 연동</span></h2>
+      <p class="en">Sign in with your WORDaLIVE account on the Prepare screen and the WORDaLIVE studio appears inside the Run screen: service order, slides and live translated captions, all in one window. Five WL scenes are created automatically — left, right or small slide, captions only, full slide — and one press of Space sends a captioned picture to YouTube.</p><p class="ko">준비 화면에서 WORDaLIVE 계정으로 로그인하면 WORDaLIVE 스튜디오가 진행 화면 안에 그대로 들어옵니다. 예배 순서, 슬라이드, 실시간 번역 자막을 한 창에서 다룹니다. WL 장면 다섯 개가 자동으로 생기고 — 왼쪽·오른쪽·작은 슬라이드, 하단 자막만, 슬라이드 전체 — Space 한 번이면 번역 자막이 얹힌 화면이 YouTube로 나갑니다.</p>
     </div>
     <div class="modes">
-      <div class="mode"><div class="lvl"><i class="on"></i><i></i><i></i></div><h3><span class="en">Not connected</span><span class="ko">연결 안 함</span></h3><p class="en">A clean broadcast app on its own — camera, slides window, and your own text.</p><p class="ko">단독 방송 앱으로 — 카메라, 슬라이드 창, 직접 입력한 문구.</p></div>
-      <div class="mode"><div class="lvl"><i class="on"></i><i class="on"></i><i></i></div><h3><span class="en">Translated captions</span><span class="ko">번역 자막만</span></h3><p class="en">Wordalive's live captions become a source you can place in any scene.</p><p class="ko">Wordalive 실시간 자막이 소스가 되어 어느 장면에나 배치됩니다.</p></div>
-      <div class="mode"><div class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></div><h3><span class="en">Captions + slides</span><span class="ko">자막 + 슬라이드</span></h3><p class="en">The full Wordalive studio: slides, service order and captions, laid out for broadcast.</p><p class="ko">Wordalive 스튜디오 전체 — 슬라이드·예배 순서·자막을 방송용 배치로.</p></div>
+      <div class="mode"><div class="lvl"><i class="on"></i><i></i><i></i></div><h3><span class="en">Not connected</span><span class="ko">연결 안 함</span></h3><p class="en">A complete broadcast app on its own — camera, slides window, your own text.</p><p class="ko">단독 방송 앱으로 — 카메라, 슬라이드 창, 직접 입력한 문구.</p></div>
+      <div class="mode"><div class="lvl"><i class="on"></i><i class="on"></i><i></i></div><h3><span class="en">Translated captions only</span><span class="ko">번역 자막만</span></h3><p class="en">WORDaLIVE's live captions become a source you can place in any scene.</p><p class="ko">WORDaLIVE 실시간 자막이 소스가 되어 어느 장면에나 배치됩니다.</p></div>
+      <div class="mode"><div class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></div><h3><span class="en">Captions + slides</span><span class="ko">슬라이드까지</span></h3><p class="en">The full WORDaLIVE studio — service order, slides and translator — laid out for broadcast.</p><p class="ko">WORDaLIVE 스튜디오 전체 — 예배 순서·슬라이드·번역기를 방송용 배치로.</p></div>
+    </div>
+    <p class="note" style="margin-top:28px"><a class="link" href="../wordalive/"><span class="en">About Wordalive</span><span class="ko">Wordalive 알아보기</span> →</a></p>
+  </div>
+</section>
+
+<section class="obs-alt" id="scenarios">
+  <div class="container split">
+    <div>
+      <div class="eyebrow"><span class="en">Saved service scenarios</span><span class="ko">예배 시나리오 저장</span></div>
+      <h2><span class="en">Same as last week, again this week.</span><span class="ko">지난주 그대로, 이번 주도</span></h2>
+      <p class="en">Scene order and source layout are saved to the cloud, with a copy on this computer. Open it on another Mac and the setup is identical. Volunteers change; the picture doesn't. Sign in with a Google account or a 6-digit email code — no password to memorize.</p><p class="ko">장면 순서와 소스 구성이 클라우드에 저장되고, 이 컴퓨터에도 사본이 남습니다. 다른 컴퓨터에서 열어도 같은 설정입니다. 봉사자가 바뀌어도 화면은 그대로입니다. 로그인은 Google 계정이나 이메일로 받는 6자리 코드로 합니다. 외울 비밀번호가 없습니다.</p>
+    </div>
+    <div class="obs-scn" aria-hidden="true">
+      <div class="h"><span class="en">Saved scenarios</span><span class="ko">저장된 시나리오</span></div>
+      <div class="r on"><b><span class="en">Sunday service · default</span><span class="ko">주일 예배 기본</span></b><small><span class="en">5 scenes · in use</span><span class="ko">장면 5개 · 지금 사용 중</span></small></div>
+      <div class="r"><b><span class="en">Wednesday service</span><span class="ko">수요 예배</span></b><small><span class="en">4 scenes</span><span class="ko">장면 4개</span></small></div>
+      <div class="r"><b><span class="en">Early morning prayer</span><span class="ko">새벽 기도회</span></b><small><span class="en">3 scenes</span><span class="ko">장면 3개</span></small></div>
     </div>
   </div>
 </section>
 
-<section>
+<section id="pricing">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow"><span class="en">Planned pricing</span><span class="ko">예정 요금</span></div>
-      <h2><span class="en">Free to start. Pro when you grow.</span><span class="ko">무료로 시작, 필요하면 Pro.</span></h2>
+      <div class="eyebrow"><span class="en">Pricing</span><span class="ko">요금제</span></div>
+      <h2><span class="en">Start free. Go Pro when you need it.</span><span class="ko">무료로 시작하고, 필요할 때 Pro로</span></h2>
+      <p class="en">The free plan includes the core features — streaming, recording and scene editing — with a watermark on the program output. Pro removes the watermark and adds natural retouch, multiple cameras and unlimited saved scenarios, with a 14-day free trial.</p><p class="ko">무료 플랜은 방송·녹화·편집 등 핵심 기능을 기본 제공합니다(송출 화면 워터마크 포함). Pro 플랜은 워터마크 제거, 자연스러운 인물 보정, 다중 카메라, 무제한 시나리오 저장을 지원하며 14일 무료 체험을 제공합니다.</p>
     </div>
-    <div class="price-grid" style="max-width:760px">
-      <div class="price"><h3>Free</h3><div class="amt">$0</div><ul>
-        <li><span class="en">1 saved scenario</span><span class="ko">저장 시나리오 1개</span></li><li><span class="en">1 camera</span><span class="ko">카메라 1대</span></li><li><span class="en">Church OBS watermark</span><span class="ko">Church OBS 워터마크</span></li></ul></div>
-      <div class="price featured"><h3>Pro</h3><div class="amt">$9.99<small> / <span class="en">month</span><span class="ko">월</span></small></div><small class="muted"><span class="en">or $79.99 / year · 2-week free trial</span><span class="ko">또는 연 $79.99 · 첫 2주 무료 체험</span></small><ul>
-        <li><span class="en">Unlimited scenarios, saved to the cloud</span><span class="ko">시나리오 무제한 · 클라우드 저장</span></li><li><span class="en">Multiple cameras</span><span class="ko">여러 대의 카메라</span></li><li><span class="en">No watermark · face retouch</span><span class="ko">워터마크 없음 · 얼굴 보정</span></li></ul></div>
+    <div class="price-grid obs-prices" style="max-width:780px">
+      <div class="price"><h3><span class="en">Free</span><span class="ko">무료</span></h3><div class="amt">$0</div><ul>
+        <li><span class="en">Streaming · recording · scene editing</span><span class="ko">방송·녹화·장면 편집</span></li>
+        <li class="no"><span class="en">Watermark at the bottom right of the program output</span><span class="ko">송출 화면 워터마크 (오른쪽 아래 표시)</span></li>
+        <li class="no"><span class="en">Natural retouch · color tone · background blur</span><span class="ko">자연 보정 · 색 톤·배경 흐림</span></li>
+        <li><span class="en">1 camera · 1 saved scenario</span><span class="ko">카메라 1대 · 예배 시나리오 저장 1개</span></li>
+        <li><span class="en">Virtual camera · portrait effect</span><span class="ko">가상 카메라 · 인물 사진 효과</span></li></ul></div>
+      <div class="price featured"><h3>Pro <span class="obs-rec"><span class="en">Recommended</span><span class="ko">추천</span></span></h3><div class="amt">$79.99<small> / <span class="en">year</span><span class="ko">년</span></small></div><small class="muted"><span class="en">About $6.67 a month — 33% less than monthly billing ($119.88/yr). 14-day free trial on first subscription.</span><span class="ko">월 $6.67꼴, 월간 결제($119.88/년)보다 33% 저렴. 처음 구독하면 14일 무료 체험.</span></small><ul>
+        <li><span class="en">Streaming · recording · scene editing</span><span class="ko">방송·녹화·장면 편집</span></li>
+        <li><span class="en">No watermark</span><span class="ko">송출 화면 워터마크 없음</span></li>
+        <li><span class="en">Natural retouch · color tone · background blur, per camera</span><span class="ko">자연 보정 · 색 톤·배경 흐림 (카메라별 설정)</span></li>
+        <li><span class="en">Multiple cameras · unlimited saved scenarios</span><span class="ko">카메라 여러 대 · 예배 시나리오 저장 무제한</span></li>
+        <li><span class="en">Virtual camera · portrait effect</span><span class="ko">가상 카메라 · 인물 사진 효과</span></li></ul></div>
     </div>
-    <p class="note"><span class="en">Church OBS is still in development; plans and prices may change before launch.</span><span class="ko">Church OBS는 개발 중이며, 출시 전 요금과 구성은 바뀔 수 있습니다.</span></p>
+    <p class="note"><span class="en">Paid with Stripe, managed on the web. During a broadcast the watermark never appears suddenly and the stream never stops — a network outage or a plan change doesn't interrupt it, and Pro status is kept for 14 days without internet.</span><span class="ko">Stripe로 결제, 웹에서 구독 관리. 방송 중에는 워터마크가 갑자기 뜨거나 방송이 중단되지 않습니다. 네트워크 장애가 생기거나 요금제가 바뀌어도 그대로 이어지고, 인터넷이 끊겨도 Pro 상태는 14일 동안 유지됩니다.</span></p>
   </div>
 </section>
-<section>
+
+<section class="obs-cta">
   <div class="container">
-    <div class="cta">
-      <div>
-        <h2><span class="en">Want to try it on a Sunday?</span><span class="ko">주일 예배에서 먼저 써 보시겠어요?</span></h2>
-        <p class="en">We're inviting a small group of churches to test Church OBS before launch.</p><p class="ko">출시 전, 소수의 교회와 함께 Church OBS를 시험하고 있습니다.</p>
-      </div>
-      <a class="btn" href="../contact/"><span class="en">Contact us</span><span class="ko">문의하기</span> →</a>
+    <img src="https://churchobs.app/assets/Church-OBS-AppIcon-Blue.svg" alt="" width="96" height="96">
+    <h2><span class="en">Try it this Sunday.</span><span class="ko">이번 주일부터 써 보세요.</span></h2>
+    <p class="en">Free · source code public · Mac (macOS 14 or later) for now, other platforms on the way.</p><p class="ko">무료 · 소스 코드 공개 · 지금은 Mac(macOS 14 이상)용, 다른 플랫폼은 준비 중</p>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn obs-primary" href="https://churchobs.app/" target="_blank" rel="noopener"><span class="en">Download free at churchobs.app</span><span class="ko">churchobs.app에서 무료 다운로드</span> →</a>
+      <a class="btn secondary" href="../contact/"><span class="en">Ask us</span><span class="ko">문의하기</span></a>
     </div>
   </div>
 </section>
