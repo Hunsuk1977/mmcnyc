@@ -102,3 +102,7 @@ swapping `{lang}` for `en` or `ko` to match the language toggle.
 - Feature-stage clips are 15–28 s, 1280×720, H.264, no audio. Each has a `.jpg` poster
   with the same name.
 
+
+## Moved (2026-10-29)
+The MMC NYC site now lives on LEBAB at https://mmcnyc.lebab.live (an organization site, edited in its admin).
+The pages here only send visitors there; the pictures stay so old links to them keep working.
