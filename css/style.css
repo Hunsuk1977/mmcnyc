@@ -400,7 +400,9 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
 .nav-menu .pm { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; grid-row: span 2; font-weight: 700; font-size: .78rem; color: #fff; }
 .nav-menu b { font-weight: 600; font-size: .95rem; line-height: 1.3; }
 .nav-menu small { color: var(--ink-3); font-size: .8rem; line-height: 1.3; }
-.pm.wa { background: #d84a28; } .pm.lb { background: #1f4e79; } .pm.obs { background: #121212; } .pm.bk { background: #4b2fbf; }
+.nav-menu .pm { background: var(--bg-alt); overflow: hidden; }
+.nav-menu .pm img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pm.obs { background: #121212; } .pm.bk { background: #fff; }
 @media (max-width: 800px) {
   .nav.open .nav-group { border-bottom: 1px solid var(--line); padding-bottom: 6px; }
   .nav.open .nav-trigger { padding: 12px 0; width: 100%; justify-content: space-between; border: 0; pointer-events: none; }
@@ -661,3 +663,5 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
   .bk-art img, .bk-logo-lg, .obs-meter i, .lb-input .caret { animation: none; }
   .obs-comp, .lb-site, .stage-screen video { transition: none; }
 }
+
+.card .card-logo { width: 40px; height: 40px; border-radius: 10px; display: block; margin-bottom: 12px; object-fit: cover; background: var(--bg-alt); }
