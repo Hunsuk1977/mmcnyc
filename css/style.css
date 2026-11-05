@@ -534,6 +534,10 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
 .obs-shot img { width: 100%; height: auto; display: block; border-radius: 14px; box-shadow: 0 60px 120px -40px rgba(0,0,0,.9), 0 0 0 1px var(--obs-line); }
 .obs-shot figcaption { margin-top: 14px; font-size: .9rem; color: var(--obs-muted); text-align: center; }
 .obs-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.obs-steps.four { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1000px) { .obs-steps.four { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .obs-steps.four { grid-template-columns: 1fr; } }
+.obs-templates small + span + small, .obs-templates span + small { margin-top: 10px; }
 .obs-step { background: var(--obs-panel); border: 1px solid var(--obs-line); border-radius: 16px; padding: 26px; }
 .obs-step .n { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--obs-blue); color: #fff; font-weight: 700; margin-bottom: 16px; }
 .obs-step p { margin: 0; font-size: .97rem; }

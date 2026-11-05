@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../css/style.css?v=20261103b">
+<link rel="stylesheet" href="../css/style.css?v=20261104">
 </head>
 <body class="p-obs">
 <header class="site-header">
@@ -62,7 +62,7 @@
     <p class="obs-note"><span class="en">The free version only adds a watermark · Mac (macOS 14+) for now, other platforms on the way · Source code is public</span><span class="ko">무료 버전은 워터마크만 붙고 기능 제한은 없습니다 · 지금은 Mac(macOS 14 이상)용, 다른 플랫폼은 준비 중 · 소스 코드 공개</span></p>
     <figure class="obs-shot">
       <img src="https://churchobs.app/assets/app-run.jpg" alt="Church OBS run screen: green preview and red program monitors, scene buttons below" width="2200" height="1520" loading="eager" decoding="async">
-      <figcaption><span class="en">The actual Run screen — green is preview, red is what's on air. One tap puts a scene in preview; Space sends it out.</span><span class="ko">실제 진행 화면 — 초록은 미리보기, 빨강은 지금 나가는 화면. 장면을 한 번 누르면 미리보기에 올라가고, Space로 송출합니다.</span></figcaption>
+      <figcaption><span class="en">The Broadcast screen — green is preview, red is what's on air. Click a scene to load it in preview; Space or a double-click sends it out.</span><span class="ko">방송 화면 — 초록은 미리보기, 빨강은 지금 나가는 화면. 장면을 클릭하면 미리보기에 올라가고, Space나 더블클릭으로 송출합니다.</span></figcaption>
     </figure>
   </div>
 </section>
@@ -71,37 +71,61 @@
   <div class="container">
     <div class="section-head">
       <div class="eyebrow"><span class="en">The flow</span><span class="ko">앱의 흐름</span></div>
-      <h2><span class="en">Three steps. That's the whole process.</span><span class="ko">단 3단계의 직관적 프로세스</span></h2>
+      <h2><span class="en">Four steps, in the order a service runs.</span><span class="ko">예배 준비 순서 그대로, 4단계</span></h2>
     </div>
-    <div class="obs-steps">
-      <div class="obs-step"><span class="n">1</span><h3><span class="en">Prepare</span><span class="ko">준비</span></h3><p class="en">Check and connect your camera, microphone and YouTube account in a few clicks. Check, check, check — that's all the preparation there is.</p><p class="ko">카메라, 마이크, 유튜브 계정을 몇 번의 클릭으로 점검하고 연결합니다. 체크, 체크, 체크. 준비는 그게 다입니다.</p></div>
-      <div class="obs-step"><span class="n">2</span><h3><span class="en">Scenes</span><span class="ko">장면</span></h3><p class="en">Lay out your screens with church-specific templates: Worship, Sermon, Scripture and more. Drag, resize, rotate — that becomes the broadcast picture.</p><p class="ko">찬양, 설교, 말씀 등 교회 전용 템플릿으로 간편하게 화면을 배치합니다. 끌고, 늘리고, 돌리면 그게 방송 화면이 됩니다.</p></div>
-      <div class="obs-step"><span class="n">3</span><h3><span class="en">Run</span><span class="ko">진행</span></h3><p class="en">Preview (green) and program (red) are kept apart so nothing goes out by mistake. Switch with the Space key.</p><p class="ko">대기(초록색)와 송출(빨간색) 화면을 구분해 실수 없이 방송합니다. Space 키로 간편하게 전환합니다.</p></div>
+    <div class="obs-steps four">
+      <div class="obs-step"><span class="n">1</span><h3><span class="en">Prepare</span><span class="ko">준비</span></h3><p class="en">Check the camera, microphone, screen-recording permission and YouTube account — each card turns green when it's ready. WORDaLIVE sign-in is optional.</p><p class="ko">카메라, 마이크, 화면 녹화 권한, YouTube 계정을 카드마다 점검합니다. 준비되면 초록색으로 바뀝니다. WORDaLIVE 로그인은 필요할 때만.</p></div>
+      <div class="obs-step"><span class="n">2</span><h3><span class="en">Scenes</span><span class="ko">장면</span></h3><p class="en">Pick from template folders — Basic, Material layouts, WORDaLIVE and My templates — then drag, resize and rotate. That becomes the broadcast picture.</p><p class="ko">기본 · 자료 배치 · WORDaLIVE · 내 템플릿 폴더에서 장면을 고르고, 끌고 늘리고 돌리면 그게 방송 화면이 됩니다.</p></div>
+      <div class="obs-step"><span class="n">3</span><h3><span class="en">Materials</span><span class="ko">자료</span></h3><p class="en">Choose what fills the slide area: the WORDaLIVE studio, a PowerPoint · Keynote · ProPresenter window, or decks you make yourself.</p><p class="ko">장면의 자료 자리에 무엇을 띄울지 고릅니다. WORDaLIVE 스튜디오, PowerPoint·Keynote·ProPresenter 창, 또는 직접 만든 덱.</p></div>
+      <div class="obs-step"><span class="n">4</span><h3><span class="en">Broadcast</span><span class="ko">방송</span></h3><p class="en">Preview (green) and program (red) are kept apart so nothing goes out by mistake. Space sends the preview out; stream, record or both.</p><p class="ko">미리보기(초록)와 송출(빨강)이 나뉘어 실수 없이 방송합니다. Space로 넘기고, 방송·녹화를 함께 또는 따로 합니다.</p></div>
     </div>
   </div>
 </section>
 
-<section class="obs-alt" id="features">
+<section class="obs-alt" id="materials">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="en">Materials</span><span class="ko">자료</span></div>
+      <h2><span class="en">Lyrics, Scripture and slides in their own step.</span><span class="ko">가사·말씀·슬라이드는 자료 단계에서</span></h2>
+      <p class="en">Every material layout has a slide area. By default it shows what you picked in the Materials step, and any scene can pin its own — a PowerPoint window for the sermon, a lyric deck for worship.</p><p class="ko">자료 배치 장면에는 자료 자리가 있습니다. 기본은 자료 단계에서 고른 것을 따라가고, 장면마다 따로 정해 둘 수도 있습니다. 설교 장면엔 PowerPoint 창, 찬양 장면엔 가사 덱처럼요.</p>
+    </div>
+    <div class="obs-grid4">
+      <div><h3><span class="en">WORDaLIVE studio</span><span class="ko">WORDaLIVE 스튜디오</span></h3><p class="en">Service order, slides and live translated captions from your WORDaLIVE account, inside the app.</p><p class="ko">WORDaLIVE 계정의 예배 순서·슬라이드·실시간 번역 자막을 앱 안에서 그대로 씁니다.</p></div>
+      <div><h3><span class="en">Window capture</span><span class="ko">창 가져오기</span></h3><p class="en">Bring in a PowerPoint, Keynote or ProPresenter window and keep using the program you already know.</p><p class="ko">PowerPoint, Keynote, ProPresenter 창을 그대로 가져와 쓰던 프로그램을 계속 씁니다.</p></div>
+      <div><h3><span class="en">Make your own decks</span><span class="ko">직접 만들기</span></h3><p class="en">Worship, Scripture and announcement decks with sections; edit the text, its place on screen and its look right in the step.</p><p class="ko">찬양·성경·문서 덱을 구간으로 나눠 만들고, 글자와 자리(위·가운데·아래), 글자 모양을 그 자리에서 고칩니다.</p></div>
+      <div><h3><span class="en">Sections switch scenes</span><span class="ko">구간마다 장면 전환</span></h3><p class="en">Give a section its own broadcast scene and room-screen scene: reach its first slide and both change for you.</p><p class="ko">구간마다 송출 장면과 출력 창 장면을 정해 두면, 그 구간 첫 슬라이드에서 함께 바뀝니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
   <div class="container split">
     <div>
       <div class="eyebrow"><span class="en">No on-air mistakes</span><span class="ko">방송 중 실수 막기</span></div>
       <h2><span class="en">You always see which screen is on air.</span><span class="ko">어느 화면이 나가는지 한눈에 보입니다</span></h2>
       <ul class="obs-list">
         <li><span class="en">Preview and program sit side by side. Resize them, then snap back to half-and-half with one button.</span><span class="ko">미리보기와 송출 화면을 나란히 놓고 봅니다. 크기를 바꿨다가도 버튼 하나로 반반으로 돌아옵니다.</span></li>
-        <li><span class="en">Tap a scene once to load it in preview, twice to send it out. Space works too.</span><span class="ko">장면을 한 번 누르면 미리보기에 올라가고, 두 번 누르면 바로 나갑니다. Space로도 넘깁니다.</span></li>
+        <li><span class="en">Click a scene to load it in preview, double-click to send it out, ⌥-click to show it on the room screen only. Space works too.</span><span class="ko">장면을 클릭하면 미리보기, 더블클릭하면 바로 송출, ⌥클릭하면 현장 출력 창에만 띄웁니다. Space로도 넘깁니다.</span></li>
         <li><span class="en">While streaming or recording, scenes are locked so they can't be edited or deleted.</span><span class="ko">방송이나 녹화가 돌아가는 동안에는 장면을 고치거나 지울 수 없게 잠깁니다.</span></li>
+        <li><span class="en">A separate room-screen output for the projector, so the sanctuary and the stream can show different scenes.</span><span class="ko">프로젝터용 출력 창이 따로 있어, 예배당 화면과 방송 화면을 다르게 보낼 수 있습니다.</span></li>
+        <li><span class="en">Show or hide the preacher's name strap with one button — the strap and the name fade together.</span><span class="ko">설교자 이름 띠는 버튼 하나로 띄우고 내립니다. 띠와 이름이 함께 부드럽게 사라집니다.</span></li>
+        <li><span class="en">Videos, loops and YouTube clips can play to the stream, the room speakers, or both, with a simple play bar and repeat.</span><span class="ko">영상·반복 영상·유튜브 영상은 방송+현장, 방송만, 현장만 중에 소리 나갈 곳을 고르고, 간단한 재생 막대와 반복으로 다룹니다.</span></li>
         <li><span class="en">Show a countdown before the service, do a test recording to check audio, and confirm YouTube is connected.</span><span class="ko">예배 전 카운트다운을 띄우고, 테스트 녹화로 소리를 확인하고, YouTube가 연결됐는지 봅니다.</span></li>
       </ul>
       <div class="obs-templates">
-        <small><span class="en">Six scene templates</span><span class="ko">장면 템플릿 여섯 가지</span></small>
-        <span class="en"><i>Blank</i><i>Standby</i><i>Worship</i><i>Sermon</i><i>Scripture · Media</i><i>Closing</i></span><span class="ko"><i>빈 장면</i><i>대기 화면</i><i>찬양</i><i>설교</i><i>말씀·자료</i><i>종료</i></span>
+        <small><span class="en">Basic</span><span class="ko">기본</span></small>
+        <span class="en"><i>Blank</i><i>Standby</i><i>Camera only</i><i>Sermon (name strap)</i><i>Video · Announcements</i><i>Closing</i></span><span class="ko"><i>빈 장면</i><i>대기 화면</i><i>카메라만</i><i>설교 (이름 띠)</i><i>영상·광고</i><i>마침</i></span>
+        <small><span class="en">Material layouts</span><span class="ko">자료 배치</span></small>
+        <span class="en"><i>Full material</i><i>Material + corner camera</i><i>Camera + material band</i><i>Camera + material right</i><i>Split</i><i>Congregation (projector)</i></span><span class="ko"><i>자료 전체</i><i>자료 + 카메라 구석</i><i>카메라 + 자료 띠</i><i>카메라 + 자료 오른쪽</i><i>좌우 분할</i><i>회중 화면 (프로젝터)</i></span>
+        <small><span class="en">WORDaLIVE · My templates</span><span class="ko">WORDaLIVE · 내 템플릿</span></small>
+        <span class="en"><i>5 WL caption layouts</i><i>WL congregation screen</i><i>Your own saved scenes</i></span><span class="ko"><i>WL 자막 배치 5가지</i><i>WL 회중 화면</i><i>직접 저장한 장면</i></span>
       </div>
     </div>
     <figure class="obs-frame"><img src="https://churchobs.app/assets/pastor-wide.jpg" alt="" width="1448" height="814" loading="lazy" decoding="async"><span class="obs-tag live">LIVE</span></figure>
   </div>
 </section>
 
-<section id="retouch">
+<section class="obs-alt" id="retouch">
   <div class="container">
     <div class="section-head">
       <div class="eyebrow"><span class="en">Smoother picture · Pro</span><span class="ko">화면을 매끄럽게 · PRO</span></div>
@@ -122,7 +146,7 @@
   </div>
 </section>
 
-<section class="obs-alt" id="outputs">
+<section id="outputs">
   <div class="container">
     <div class="section-head">
       <div class="eyebrow"><span class="en">Anywhere</span><span class="ko">어디서나</span></div>
@@ -137,12 +161,12 @@
   </div>
 </section>
 
-<section id="wordalive">
+<section class="obs-alt" id="wordalive">
   <div class="container">
     <div class="section-head">
       <div class="eyebrow"><span class="en">WORDaLIVE integration</span><span class="ko">WORDaLIVE 연동</span></div>
       <h2><span class="en">Simple, reliable integration with WORDaLIVE, our proven sermon-translation app.</span><span class="ko">검증된 설교 전문 번역앱 WORDaLIVE와 간편하고 안정적인 연동</span></h2>
-      <p class="en">Sign in with your WORDaLIVE account on the Prepare screen and the WORDaLIVE studio appears inside the Run screen: service order, slides and live translated captions, all in one window. Five WL scenes are created automatically — left, right or small slide, captions only, full slide — and one press of Space sends a captioned picture to YouTube.</p><p class="ko">준비 화면에서 WORDaLIVE 계정으로 로그인하면 WORDaLIVE 스튜디오가 진행 화면 안에 그대로 들어옵니다. 예배 순서, 슬라이드, 실시간 번역 자막을 한 창에서 다룹니다. WL 장면 다섯 개가 자동으로 생기고 — 왼쪽·오른쪽·작은 슬라이드, 하단 자막만, 슬라이드 전체 — Space 한 번이면 번역 자막이 얹힌 화면이 YouTube로 나갑니다.</p>
+      <p class="en">Sign in with your WORDaLIVE account on the Prepare screen and choose WORDaLIVE in the Materials step: the WORDaLIVE studio opens inside Church OBS — service order, slides and live translated captions in one window. The WORDaLIVE template folder has five caption layouts (left, right or small slide, captions only, full slide) plus a congregation screen, and one press of Space sends a captioned picture to YouTube. Translation time is billed in WORDaLIVE as usual.</p><p class="ko">준비 화면에서 WORDaLIVE 계정으로 로그인하고 자료 단계에서 WORDaLIVE를 고르면, WORDaLIVE 스튜디오가 Church OBS 안에 그대로 열립니다. 예배 순서, 슬라이드, 실시간 번역 자막을 한 창에서 다룹니다. WORDaLIVE 템플릿 폴더에는 자막 배치 다섯 가지(왼쪽·오른쪽·작은 슬라이드, 하단 자막만, 슬라이드 전체)와 회중 화면이 있고, Space 한 번이면 번역 자막이 얹힌 화면이 YouTube로 나갑니다. 번역 사용 시간은 평소처럼 WORDaLIVE에서 차감됩니다.</p>
     </div>
     <div class="modes">
       <div class="mode"><div class="lvl"><i class="on"></i><i></i><i></i></div><h3><span class="en">Not connected</span><span class="ko">연결 안 함</span></h3><p class="en">A complete broadcast app on its own — camera, slides window, your own text.</p><p class="ko">단독 방송 앱으로 — 카메라, 슬라이드 창, 직접 입력한 문구.</p></div>
@@ -153,7 +177,7 @@
   </div>
 </section>
 
-<section class="obs-alt" id="scenarios">
+<section id="scenarios">
   <div class="container split">
     <div>
       <div class="eyebrow"><span class="en">Saved service scenarios</span><span class="ko">예배 시나리오 저장</span></div>
@@ -169,7 +193,7 @@
   </div>
 </section>
 
-<section id="pricing">
+<section class="obs-alt" id="pricing">
   <div class="container">
     <div class="section-head">
       <div class="eyebrow"><span class="en">Pricing</span><span class="ko">요금제</span></div>
